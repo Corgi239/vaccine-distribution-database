@@ -66,3 +66,25 @@ CREATE TABLE StaffMember(
     PRIMARY(ssNo)
 );
 
+CREATE TABLE VaccinationEvent(
+    date DATE,
+    location VARCHAR(100),
+    batchID VARCHAR(10),
+    weekday Weekday,
+    
+    FOREIGN KEY (location) REFERENCES MedicalFacility(name),
+    FOREIGN KEY (batchID) REFERENCES VaccinationBatch(batchID),
+    PRIMARY KEY (date, location)
+);
+
+CREATE DOMAIN Weekday as VARCHAR(10) (
+    CHECK value IN (
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    )
+);
