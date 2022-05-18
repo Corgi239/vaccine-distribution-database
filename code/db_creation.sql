@@ -53,6 +53,12 @@ CREATE TABLE TransportationLog(
     PRIMARY KEY (ID)
 );
 
+CREATE TABLE VaccinationShift(
+    weekday Weekday NOT NULL,
+
+    PRIMARY KEY (weekday)
+);
+
 CREATE TABLE StaffMember(
     ssNo VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
@@ -67,17 +73,80 @@ CREATE TABLE StaffMember(
 );
 
 CREATE TABLE VaccinationEvent(
-    date DATE,
-    location VARCHAR(100),
-    batchID VARCHAR(10),
-    weekday Weekday,
+    date DATE NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    batchID VARCHAR(10) NOT NULL,
+    weekday Weekday NOT NULL,
     
     FOREIGN KEY (location) REFERENCES MedicalFacility(name),
     FOREIGN KEY (batchID) REFERENCES VaccinationBatch(batchID),
     PRIMARY KEY (date, location)
 );
 
-CREATE DOMAIN Weekday as VARCHAR(10) (
+CREATE TABLE Patient(
+    ssNo VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    birthday DATE NOT NULL,
+    gender GenderDomain NOT NULL,
+    vaccinationStatus INT NOT NULL CHECK (vaccinationStatus = 0 OR vaccinationStatus = 1),
+
+    PRIMARY KEY (ssNo)
+);
+
+CREATE TABLE Symptom(
+    name VARCHAR(50) NOT NULL,
+    critical INT NOT NULL CHECK (critical = 0 OR critical = 1),
+
+    PRIMARY KEY (name)
+);
+
+CREATE TABLE Diagnosed(
+    patient VARCHAR(50) NOT NULL,
+    symptom VARCHAR(50) NOT NULL,
+    date DATE NOT NULL,
+
+    FOREIGN KEY (patient) REFERENCES Patient(ssNo),
+    FOREIGN KEY (symptom) REFERENCES Symptom(name),
+    PRIMARY KEY (patient, symptom, date)
+);
+
+CREATE TABLE Attend(
+    date DATE NOT NULL,
+    location VARCHAR(100) NOT NULL,
+    patient VARCHAR(50) NOT NULL,
+
+    FOREIGN KEY (date) REFERENCES VaccinationEvent(date),
+    FOREIGN KEY (location) REFERENCES VaccinationEvent(location),
+    FOREIGN KEY (patient) REFERENCES Patient(ssNo),
+    PRIMARY KEY (date, location, patient)
+);
+
+CREATE TABLE Plan(
+    shiftWeekday VARCHAR(10) NOT NULL,
+    facilityName VARCHAR(100) NOT NULL,
+
+    FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday)
+);
+
+CREATE TABLE WorkOn(
+    staffSSNo VARCHAR(50) NOT NULL,
+    shiftWeekday VARCHAR(10) NOT NULL,
+
+    FOREIGN KEY (staffSSNo) REFERENCES StaffMember(ssNo),
+    FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday),
+    PRIMARY KEY (staffSSNo, shiftWeekday)
+);
+
+CREATE TABLE Employed(
+    staffSSNo VARCHAR(50) NOT NULL,
+    location VARCHAR(100) NOT NULL,
+
+    FOREIGN KEY (staffSSNo) REFERENCES StaffMember(ssNo),
+    FOREIGN KEY (location) REFERENCES MedicalFacility(name),
+    PRIMARY KEY (staffSSNo, location)
+);
+
+CREATE DOMAIN Weekday VARCHAR(10) (
     CHECK value IN (
         "Monday",
         "Tuesday",
@@ -87,4 +156,8 @@ CREATE DOMAIN Weekday as VARCHAR(10) (
         "Saturday",
         "Sunday"
     )
+);
+
+CREATE DOMAIN GenderDomain CHAR(1)(
+    CHECK (VALUE IN ('F', 'M', 'O'))
 );
