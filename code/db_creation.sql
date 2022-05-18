@@ -137,7 +137,8 @@ CREATE TABLE WorkOn(
     FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday),
     PRIMARY KEY (staffSSNo, shiftWeekday)
 );
-
+/* Employed might not be needed since we had attribute employer in StaffMember 
+*/
 CREATE TABLE Employed(
     staffSSNo VARCHAR(50) NOT NULL,
     location VARCHAR(100) NOT NULL,

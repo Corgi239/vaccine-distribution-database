@@ -9,3 +9,10 @@ WHERE StaffMember.ssNo = Employed.StaffSSNo AND Employed.location = MedicalFacil
 
 /* 2
 */
+SELECT ssNo, name
+FROM StaffMember, WorkOn, MedicalFacility
+WHERE StaffMember.ssNo = WorkOn.staffSSNo AND StaffMember.role = "doctor" AND WorkOn.shiftWeekday = "Wednesday" AND StaffMember.employer = MedicalFacility.name AND MedicalFacility.address LIKE "%HELSINKI"
+
+/* 3
+*/
+
