@@ -83,13 +83,13 @@ CREATE TABLE VaccinationEvent(
     PRIMARY KEY (date, location)
 );
 
+/*Maybe remove the vaccinationStatus because we are asked to create vaccinationStatus in query 5 */
 CREATE TABLE Patient(
     ssNo VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     birthday DATE NOT NULL,
     gender GenderDomain NOT NULL,
     vaccinationStatus INT NOT NULL CHECK (vaccinationStatus = 0 OR vaccinationStatus = 1),
-
     PRIMARY KEY (ssNo)
 );
 
