@@ -42,4 +42,11 @@ WHERE Diagnosed.date > '2021-05-10' AND Patient.ssNo = Diagnosed.patient AND Dia
 VaccinationBatch, Attend
 WHERE VaccinatedCriticalPatient.patient = Attend.patient AND Attend.date = VaccinationEvent.date AND Attend.location = VaccinationEvent.location AND VaccinationEvent.batchID = VaccinationBatch.batchID
 
+/* 5
+*/
 
+CREATE VIEW PatientVaccinationStatus(ssNo, name, birthday, gender, vaccinationStatus) AS:
+SELECT Patient.ssNo, Patient.name, Patient.birthday, Patient.gender, (0.5 * (COUNT(Attend.date) - 1 + ABS(COUNT(Attend.date) - 1)))
+FROM Patient, Attend
+WHERE Attend.patient = Patient.ssNo
+GROUP BY Patient.ssNo
