@@ -40,6 +40,6 @@ FROM VaccinationEvent,
 FROM Patient, Diagnosed, Symptom
 WHERE Diagnosed.date > '2021-05-10' AND Patient.ssNo = Diagnosed.patient AND Diagnosed.sympyom = Symptom.name) AS VaccinatedCriticalPatient, 
 VaccinationBatch, Attend
-WHERE VaccinatedCriticalPatient.patient = Attend.patient AND Attend.date = VaccinationEvent.date AND Attend.location = VaccinationEvent.location AND VaccinationEvent = VaccinationBatch
+WHERE VaccinatedCriticalPatient.patient = Attend.patient AND Attend.date = VaccinationEvent.date AND Attend.location = VaccinationEvent.location AND VaccinationEvent.batchID = VaccinationBatch.batchID
 
 
