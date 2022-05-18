@@ -4,7 +4,7 @@
 
 SELECT ssNo, name, phone, role, vaccinationStatus, MedicalFacility.location
 FROM StaffMember, MedicalFacility, VaccinationEvent, WorkOn
-WHERE StaffMember.employer = MedicalFacility.name AND MedicalFacility.name = VaccinationEvent.location AND StaffMember.ssNo = WorkOn.shiftWeekday AND WorkOn.shiftWeekday = VaccinationEvent.weekday AND VaccinationEvent.date = '2021-05-10'
+WHERE StaffMember.employer = MedicalFacility.name AND MedicalFacility.name = VaccinationEvent.location AND StaffMember.ssNo = WorkOn.staffSSNo AND WorkOn.shiftWeekday = VaccinationEvent.weekday AND VaccinationEvent.date = '2021-05-10'
 
 
 /* 2
