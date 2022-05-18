@@ -37,8 +37,8 @@ WHERE intendedLocation != currentLocation
 SELECT VaccinatedCriticalPatient.patient, VaccinationEvent.batchID, VaccinationBatch.vaccineID, VaccinationEvent.date, VaccinationEvent.location
 FROM VaccinationEvent, 
 (SELECT Patient.ssNo AS patient
-FROM Patient, Attend, Diagnosed, Symptom
-WHERE Patient.ssNo = Attend.patient AND Attend.date > '2021-05-10' AND Patient.ssNo = Diagnosed.patient AND Diagnosed.sympyom = Symptom.name) AS VaccinatedCriticalPatient, 
+FROM Patient, Diagnosed, Symptom
+WHERE Diagnosed.date > '2021-05-10' AND Patient.ssNo = Diagnosed.patient AND Diagnosed.sympyom = Symptom.name) AS VaccinatedCriticalPatient, 
 VaccinationBatch, Attend
 WHERE VaccinatedCriticalPatient.patient = Attend.patient AND Attend.date = VaccinationEvent.date AND Attend.location = VaccinationEvent.location AND VaccinationEvent = VaccinationBatch
 
