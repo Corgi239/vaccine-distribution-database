@@ -15,4 +15,9 @@ WHERE StaffMember.ssNo = WorkOn.staffSSNo AND StaffMember.role = "doctor" AND Wo
 
 /* 3
 */
-
+SELECT VaccinationBatch.batchID AS batchID, VaccinationBatch.initialReceiver AS intendedLocation, CurrentState.location as currentLocation
+FROM VaccinationBatch, (SELECT VaccinationBatch.batchID AS ID, MAX(TransportationLog.arrivalDate), TransportationLog.receiverName AS location
+                        FROM VaccinationBatch, TransportationLog
+                        WHERE VaccinationBatch.batchID = TransportationLog.batchID
+                        GROUP BY VaccinationBatch.batchID) AS CurrentState
+WHERE VaccinationBatch.batchID = CurrentState.ID, VaccinationBatch.initialReceiver != CurrentState.location
