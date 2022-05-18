@@ -52,3 +52,17 @@ CREATE TABLE TransportationLog(
     FOREIGN KEY (batchID) REFERENCES VaccinationBatch(batchID),
     PRIMARY KEY (ID)
 );
+
+CREATE TABLE StaffMember(
+    ssNo VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    birthday DATE NOT NULL,
+    vaccinationStatus INT NOT NULL CHECK (vaccinationStatus = 0 OR vaccinationStatus = 1),
+    role VARCHAR(10) NOT NULL CHECK (role IN ('doctor', 'nurse')),
+    employer VARCHAR(100) NOT NULL,
+
+    FOREIGN KEY (employer) REFERENCES MedicalFacility(name),
+    PRIMARY(ssNo)
+);
+
