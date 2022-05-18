@@ -125,7 +125,8 @@ CREATE TABLE Plan(
     shiftWeekday VARCHAR(10) NOT NULL,
     facilityName VARCHAR(100) NOT NULL,
 
-    FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday)
+    FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday),
+    PRIMARY KEY (shiftWeekday, facilityName)
 );
 
 CREATE TABLE WorkOn(
