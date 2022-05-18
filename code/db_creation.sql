@@ -69,7 +69,7 @@ CREATE TABLE StaffMember(
     employer VARCHAR(100) NOT NULL,
 
     FOREIGN KEY (employer) REFERENCES MedicalFacility(name),
-    PRIMARY(ssNo)
+    PRIMARY KEY(ssNo)
 );
 
 CREATE TABLE VaccinationEvent(
@@ -136,16 +136,6 @@ CREATE TABLE WorkOn(
     FOREIGN KEY (staffSSNo) REFERENCES StaffMember(ssNo),
     FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday),
     PRIMARY KEY (staffSSNo, shiftWeekday)
-);
-/* Employed might not be needed since we had attribute employer in StaffMember 
-*/
-CREATE TABLE Employed(
-    staffSSNo VARCHAR(50) NOT NULL,
-    location VARCHAR(100) NOT NULL,
-
-    FOREIGN KEY (staffSSNo) REFERENCES StaffMember(ssNo),
-    FOREIGN KEY (location) REFERENCES MedicalFacility(name),
-    PRIMARY KEY (staffSSNo, location)
 );
 
 CREATE DOMAIN Weekday VARCHAR(10) (
