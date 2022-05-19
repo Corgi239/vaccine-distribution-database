@@ -11,3 +11,5 @@ df_patients = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="P
 df_vaccine_patients = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccinePatients")
 df_symptoms = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Symptoms")
 df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Diagnosis")
+
+print(df_diagnosis.head())
