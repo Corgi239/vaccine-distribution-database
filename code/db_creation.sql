@@ -89,7 +89,6 @@ CREATE TABLE Patient(
     name VARCHAR(50) NOT NULL,
     birthday DATE NOT NULL,
     gender GenderDomain NOT NULL,
-    vaccinationStatus INT NOT NULL CHECK (vaccinationStatus = 0 OR vaccinationStatus = 1),
     PRIMARY KEY (ssNo)
 );
 
