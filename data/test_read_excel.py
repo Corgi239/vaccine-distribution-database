@@ -1,6 +1,6 @@
 import pandas as pd
 df_vaccine_type = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccineType")
-df_maunfacturer = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Manufacturer")
+df_manufacturer = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Manufacturer")
 df_vaccine_batch = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccineBatch")
 df_vaccination_stations = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccinationStations")
 df_transportation_log = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Transportation log")
@@ -21,7 +21,6 @@ DB_NAME_ = 'data/query.db'
 engine = create_engine(SQLITE_SRV + DB_NAME_, echo = False)
 db_conn = engine.connect()
 
-<<<<<<< HEAD
 df_vaccine_type.to_sql("VaccineData", db_conn, if_exists='replace')
 df_vaccine_batch.to_sql('VaccinationBatch', db_conn, if_exists='replace')
 df_manufacturer.to_sql("Manufacturer", db_conn, if_exists='replace')
@@ -34,9 +33,6 @@ df_patients.to_sql("Patient", db_conn, if_exists='replace')
 df_vaccine_patients.to_sql("Attend", db_conn, if_exists='replace')
 df_symptoms.to_sql("Symptom", db_conn, if_exists='replace')
 df_diagnosis.to_sql("Diagnosed", db_conn, if_exists='replace')
-=======
-df_vaccine_batch.to_sql('VaccineBatch', db_conn, if_exists='replace')
->>>>>>> 7e6fdbb6f3eaf4c79b88bd8883c1db60a89d0721
 
 query = """
         SELECT SumForType.location, type, typeSum, sum FROM
