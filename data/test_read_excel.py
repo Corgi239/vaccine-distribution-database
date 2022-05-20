@@ -35,8 +35,18 @@ df_symptoms.to_sql("Symptom", db_conn, if_exists='replace')
 df_diagnosis.to_sql("Diagnosed", db_conn, if_exists='replace')
 
 query = """
-        SELECT location
-        FROM VaccinationEvent
+        SELECT NoSymptom.vaccineType AS vaccineType, WithSymptom.symptom AS symptom, (CAST(WithSymptom.numberOfPatient AS DECIMAL) / NoSymptom.numberOfPatient) AS frequency
+        FROM
+        (SELECT VaccinationBatch.type AS vaccineType, COUNT(Patient.ssNo) AS numberOfPatient
+        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Symptom, Diagnosed
+        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND VaccinationEvent.date = Attend.date AND VaccinationEvent.location = Attend.location AND Attend.patientSsNo = Patient.ssNo AND Patient.ssNo = Diagnosed.patient AND Diagnosed.symptom = Symptom.name AND VaccinationEvent.date < Diagnosed.date
+        GROUP BY VaccinationBatch.type) AS NoSymptom
+        INNER JOIN
+        (SELECT VaccinationBatch.type AS vaccineType, Symptom.name AS symptom, COUNT(Patient.ssNo) AS numberOfPatient
+        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Symptom, Diagnosed
+        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND VaccinationEvent.date = Attend.date AND VaccinationEvent.location = Attend.location AND Attend.patientSsNo = Patient.ssNo AND Patient.ssNo = Diagnosed.patient AND Diagnosed.symptom = Symptom.name AND VaccinationEvent.date < Diagnosed.date
+        GROUP BY VaccinationBatch.type, Symptom.name) AS WithSymptom
+        ON NoSymptom.vaccineType = WithSymptom.vaccineType
         """
 
 tx_ = pd.read_sql_query(query, db_conn)
