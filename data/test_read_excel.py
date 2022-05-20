@@ -24,8 +24,9 @@ db_conn = engine.connect()
 df_vaccine_batch.to_sql('VaccineBatch', db_conn, if_exists='replace')
 
 query = """
-        SELECT * 
-        FROM VaccineBatch
+        SELECT SumForType.location, type, typeSum, sum FROM
+        (SELECT vaccineBatch.location AS location, vaccineBatch.type AS type, SUM(vaccineBatch.amount) AS typeSum FROM vaccineBatch GROUP BY vaccineBatch.location, vaccineBatch.type) AS SumForType
+        INNER JOIN (SELECT vaccineBatch.location AS location, SUM(vaccineBatch.amount) AS sum FROM vaccineBatch GROUP BY vaccineBatch.location) AS TotalSum ON SumForType.location = TotalSum.location
         """
 
 tx_ = pd.read_sql_query(query, db_conn)
