@@ -12,8 +12,7 @@ df_vaccine_patients = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet
 df_symptoms = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Symptoms")
 df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Diagnosis")
 
-from sqlalchemy import create_engine,event,schema,Table,text
-from sqlalchemy_utils import database_exists,create_database
+from sqlalchemy import create_engine
 
 SQLITE_SRV = 'sqlite:///'
 DB_NAME_ = 'data/query.db'
