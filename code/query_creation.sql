@@ -54,5 +54,20 @@ GROUP BY Patient.ssNo
 /* 6
 */
 SELECT SumForType.location, type, typeSum, sum FROM
-        (SELECT vaccinationBatch.location AS location, vaccinationBatch.type AS type, SUM(vaccinationBatch.amount) AS typeSum FROM vaccinationBatch GROUP BY vaccinationBatch.location, vaccinationBatch.type) AS SumForType
-        INNER JOIN (SELECT vaccinationBatch.location AS location, SUM(vaccinationBatch.amount) AS sum FROM vaccinationBatch GROUP BY vaccinationBatch.location) AS TotalSum ON SumForType.location = TotalSum.location
+        (SELECT vaccinationBatch.initialReceiver AS location, VaccinationBatch.vaccineID AS type, SUM(vaccinationBatch.amount) AS typeSum FROM vaccinationBatch GROUP BY vaccinationBatch.initialReceiver, VaccinationBatch.vaccineID) AS SumForType
+        INNER JOIN (SELECT vaccinationBatch.initialReceiver AS location, SUM(vaccinationBatch.amount) AS sum FROM vaccinationBatch GROUP BY vaccinationBatch.initialReceiver) AS TotalSum ON SumForType.location = TotalSum.location
+
+/* 7
+*/ 
+SELECT NoSymptom.vaccineType AS vaccineType, WithSymptom.symptom AS symptom, (CAST(WithSymptom.numberOfPatient AS DECIMAL) / NoSymptom.numberOfPatient) AS frequency
+        FROM
+        (SELECT VaccinationBatch.vaccineID AS vaccineType, COUNT(Patient.ssNo) AS numberOfPatient
+        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Symptom, Diagnosed
+        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND VaccinationEvent.date = Attend.date AND VaccinationEvent.location = Attend.location AND Attend.patient = Patient.ssNo AND Patient.ssNo = Diagnosed.patient AND Diagnosed.symptom = Symptom.name AND VaccinationEvent.date < Diagnosed.date
+        GROUP BY VaccinationBatch.vaccineID) AS NoSymptom
+        INNER JOIN
+        (SELECT VaccinationBatch.vaccineID AS vaccineType, Symptom.name AS symptom, COUNT(Patient.ssNo) AS numberOfPatient
+        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Symptom, Diagnosed
+        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND VaccinationEvent.date = Attend.date AND VaccinationEvent.location = Attend.location AND Attend.patient = Patient.ssNo AND Patient.ssNo = Diagnosed.patient AND Diagnosed.symptom = Symptom.name AND VaccinationEvent.date < Diagnosed.date
+        GROUP BY VaccinationBatch.vaccineID, Symptom.name) AS WithSymptom
+        ON NoSymptom.vaccineType = WithSymptom.vaccineType
