@@ -35,9 +35,8 @@ df_symptoms.to_sql("Symptom", db_conn, if_exists='replace')
 df_diagnosis.to_sql("Diagnosed", db_conn, if_exists='replace')
 
 query = """
-        SELECT SumForType.location, type, typeSum, sum FROM
-        (SELECT vaccinationBatch.location AS location, vaccinationBatch.type AS type, SUM(vaccinationBatch.amount) AS typeSum FROM vaccinationBatch GROUP BY vaccinationBatch.location, vaccinationBatch.type) AS SumForType
-        INNER JOIN (SELECT vaccinationBatch.location AS location, SUM(vaccinationBatch.amount) AS sum FROM vaccinationBatch GROUP BY vaccinationBatch.location) AS TotalSum ON SumForType.location = TotalSum.location
+        SELECT location
+        FROM VaccinationEvent
         """
 
 tx_ = pd.read_sql_query(query, db_conn)
