@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+import sqlalchemy as db
 
 DATADIR = str(Path(__file__).parent.parent) # for relative path 
 
@@ -20,3 +21,10 @@ df_symptoms = pd.read_excel(excel_file_path, sheet_name="Symptoms")
 df_diagnosis = pd.read_excel(excel_file_path, sheet_name="Diagnosis")
 
 print("Importing Done. 10 dataframes were created.")
+
+my_path         = str(Path(__file__).parent)+'/'
+SQLITE_SRV      = 'sqlite:///'
+
+engine       = db.create_engine(SQLITE_SRV + my_path + DB_NAME_, echo=False)
+sqlite_conn  = engine.connect()
+
