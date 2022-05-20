@@ -13,7 +13,7 @@ df_symptoms = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="S
 df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Diagnosis")
 
 from sqlalchemy import create_engine,event,schema,Table,text
-from sqlalchemy_utils import database_exists,create_database
+# from sqlalchemy_utils import database_exists,create_database
 
 SQLITE_SRV = 'sqlite:///'
 DB_NAME_ = 'data/query.db'
@@ -35,10 +35,14 @@ df_symptoms.to_sql("Symptom", db_conn, if_exists='replace')
 df_diagnosis.to_sql("Diagnosed", db_conn, if_exists='replace')
 
 query = """
-        SELECT location
-        FROM VaccinationEvent
+        SELECT VaccinationBatch.type, Diagnosed.symptom, Patient.ssNo
+        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Diagnosed
+        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND Attend.date = VaccinationEvent.date AND Attend.location = VaccinationEvent.location AND Attend.patientSsNo = Patient.ssNo 
+          AND Diagnosed.patient = Patient.ssNo AND Diagnosed.Date > VaccinationEvent.date
         """
 
 tx_ = pd.read_sql_query(query, db_conn)
 print(tx_)
+
+
 
