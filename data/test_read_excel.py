@@ -23,8 +23,9 @@ db_conn = engine.connect()
 df_vaccine_batch.to_sql('VaccineBatch', db_conn, if_exists='replace')
 
 query = """
-        SELECT *
+        SELECT location, batchID, SUM(amount)
         FROM VaccineBatch
+        GROUP BY location, batchID;
         """
 
 tx_ = pd.read_sql_query(query, db_conn)
