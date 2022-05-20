@@ -20,23 +20,23 @@ DB_NAME_ = 'data/query.db'
 engine = create_engine(SQLITE_SRV + DB_NAME_, echo = False)
 db_conn = engine.connect()
 
-df_vaccine_type.to_sql("VaccineType", db_conn, if_exists='replace')
-df_vaccine_batch.to_sql('VaccineBatch', db_conn, if_exists='replace')
+df_vaccine_type.to_sql("VaccineData", db_conn, if_exists='replace')
+df_vaccine_batch.to_sql('VaccinationBatch', db_conn, if_exists='replace')
 df_manufacturer.to_sql("Manufacturer", db_conn, if_exists='replace')
-df_vaccination_stations.to_sql("VaccinationStations", db_conn, if_exists='replace')
+df_vaccination_stations.to_sql("MedicalFacility", db_conn, if_exists='replace')
 df_transportation_log.to_sql("TransportationLog", db_conn, if_exists='replace')
-df_staff_members.to_sql("StaffMembers", db_conn, if_exists='replace')
-df_shifts.to_sql("Shifts", db_conn, if_exists='replace')
-df_vaccinations.to_sql("VaccinationEvents", db_conn, if_exists='replace')
-df_patients.to_sql("Patients", db_conn, if_exists='replace')
-df_vaccine_patients.to_sql("VaccinePatients", db_conn, if_exists='replace')
-df_symptoms.to_sql("Symptoms", db_conn, if_exists='replace')
-df_diagnosis.to_sql("Diagnosis", db_conn, if_exists='replace')
+df_staff_members.to_sql("StaffMember", db_conn, if_exists='replace')
+df_shifts.to_sql("VaccinationShift", db_conn, if_exists='replace')
+df_vaccinations.to_sql("VaccinationEvent", db_conn, if_exists='replace')
+df_patients.to_sql("Patient", db_conn, if_exists='replace')
+df_vaccine_patients.to_sql("Attend", db_conn, if_exists='replace')
+df_symptoms.to_sql("Symptom", db_conn, if_exists='replace')
+df_diagnosis.to_sql("Diagnosed", db_conn, if_exists='replace')
 
 query = """
         SELECT SumForType.location, type, typeSum, sum FROM
-        (SELECT vaccineBatch.location AS location, vaccineBatch.type AS type, SUM(vaccineBatch.amount) AS typeSum FROM vaccineBatch GROUP BY vaccineBatch.location, vaccineBatch.type) AS SumForType
-        INNER JOIN (SELECT vaccineBatch.location AS location, SUM(vaccineBatch.amount) AS sum FROM vaccineBatch GROUP BY vaccineBatch.location) AS TotalSum ON SumForType.location = TotalSum.location
+        (SELECT vaccinationBatch.location AS location, vaccinationBatch.type AS type, SUM(vaccinationBatch.amount) AS typeSum FROM vaccinationBatch GROUP BY vaccinationBatch.location, vaccinationBatch.type) AS SumForType
+        INNER JOIN (SELECT vaccinationBatch.location AS location, SUM(vaccinationBatch.amount) AS sum FROM vaccinationBatch GROUP BY vaccinationBatch.location) AS TotalSum ON SumForType.location = TotalSum.location
         """
 
 tx_ = pd.read_sql_query(query, db_conn)
