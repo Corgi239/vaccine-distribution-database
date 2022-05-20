@@ -34,7 +34,7 @@ df_symptoms.to_sql("Symptoms", db_conn, if_exists='replace')
 df_diagnosis.to_sql("Diagnosis", db_conn, if_exists='replace')
 
 query = """
-        SELECT location, batchID, SUM(amount)
+        SELECT location, batchID, SUM(amount) AS TotalForBatch
         FROM VaccineBatch
         GROUP BY location, batchID;
         """
