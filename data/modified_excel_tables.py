@@ -77,6 +77,8 @@ print(patient.head())
 ## Attend
 attend = df_vaccine_patients[[col for col in df_vaccine_patients if not col.startswith('Unnamed:')]]
 attend = attend.rename(columns={'patientSsNo': 'patient'})
+attend['date'] = pd.to_datetime(attend['date'], errors='coerce')
+attend = attend.dropna(axis=0, subset=['date'])
 print('Attend: ')
 print(attend.head())
 
@@ -89,5 +91,7 @@ print(symptom.head())
 ## Diagnosed
 
 diagnosed = df_diagnosis[[col for col in df_diagnosis if not col.startswith('Unnamed:')]]
+diagnosed['date'] = pd.to_datetime(diagnosed['date'], errors='coerce')
+diagnosed = diagnosed.dropna(axis=0, subset=['date'])
 print('Diagnosed')
-print(diagnosed.head())
+print(diagnosed)
