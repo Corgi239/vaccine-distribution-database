@@ -18,9 +18,23 @@ df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="
 
 # Creating corresponding data frames:
 
+## 
 vaccination_shifts = df_shifts[['weekday']]
-print(vaccination_shifts)
+print('VaccinationShitfs: ')
+print(vaccination_shifts.head())
 
 vaccination_event = df_vaccinations[['date', 'location', 'batchID']]
 vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
-print(vaccination_event)
+print('VaccinationEvent: ')
+print(vaccination_event.head())
+
+patient = df_patients[['ssNo', 'name', 'date of birth', 'gender']]
+patient = patient.rename(columns={'date of birth': 'birthday'})
+print('Patient: ')
+print(patient.head())
+
+attend = df_vaccine_patients[['date', 'location', 'patientSsNo']]
+attend = attend.rename(columns={'patientSsNo': 'patient'})
+print('Attend: ')
+print(attend.head())
+
