@@ -1,6 +1,4 @@
 import pandas as pd
-import datetime
-
 # Reading all data frames:
 
 df_vaccine_type = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccineType")
