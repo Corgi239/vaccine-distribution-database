@@ -115,7 +115,6 @@ def main():
         psql_conn.execute("INSERT INTO VaccinationShift VALUES ('Tuesday');")
         result = psql_conn.execute("SELECT * FROM VaccinationShift;" )
         print(f'After create and insert:\n{result.fetchall()}')
-        psql_conn.execute("DROP TABLE VaccinationShift;")
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
