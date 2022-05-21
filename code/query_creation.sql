@@ -4,11 +4,7 @@
 
 SELECT ssno, staffmember.name, staffmember.phone, role, vaccinationstatus, medicalfacility.name AS location
 FROM staffmember, medicalfacility, vaccinationevent, vaccinationshift
-<<<<<<< HEAD
-WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.date = '2021-05-10' AND vaccinationshift.weekday = to_char(date vaccinationevent.date, 'Day');
-=======
 WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.eventdate = '2021-05-10' AND vaccinationshift.weekday = to_char(vaccinationevent.eventdate, 'Day');
->>>>>>> c0a4b52dc202ad1208c88df83b5fd453ecd117e6
 
 
 /* 2
