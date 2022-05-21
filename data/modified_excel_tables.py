@@ -18,6 +18,7 @@ df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="
 
 # Creating corresponding data frames:
 
+<<<<<<< HEAD
 vaccineData = df_vaccine_type
 vaccineData.columns = ['vaccineID', 'name', 'nrOfDoses', 'tempMin', 'tempMax']
 print(vaccineData)
@@ -29,9 +30,31 @@ print(manufacturer)
 vaccinationBatch = df_vaccine_batch
 vaccinationBatch.columns = ['batchID', 'amount', 'manufDate', 'expDate', 'manufID', 'vaccineID', 'initialReceiver']
 print(vaccinationBatch)
+=======
 
+## VaccineData
+vaccine_data = df_vaccine_type
+vaccine_data.columns = ['vaccineID', 'name', 'nrOfDoses', 'tempMin', 'tempMax']
+print('VaccineData: ')
+print(vaccine_data.head())
+
+## Manufacturer
+manufacturer = df_manufacturer
+manufacturer.columns = ['ID', 'origin', 'phone', 'vaccineID']
+print('Manufacturer: ')
+print(manufacturer.head())
+
+## Vaccinationbatch
+vaccinationBatch = df_vaccine_batch
+vaccinationBatch.columns = ['batchID', 'amount', 'manufDate', 'expDate', 'manufID', 'vaccineID', 'initialReceiver']
+print('VaccinationBatch: ')
+print(vaccinationBatch.head())
+>>>>>>> a233064d5ad5bea1f455c7dfd5af851b147c1c93
+
+## MedicalFacility
 medicalFacility = df_vaccination_stations
 medicalFacility.columns = ['name', 'address', 'phone']
+<<<<<<< HEAD
 print(medicalFacility)
 
 transportationLog = df_transportation_log
@@ -41,10 +64,19 @@ print(transportationLog)
 
 staffMembers = df_staff_members
 staffMembers.columns = ['ssNo', 'name', 'phone', 'birthday', 'vaccinationStatus', 'role', 'employer']
+=======
+print('MedicalFacility:')
+print(medicalFacility)
+
+## TransportationLog
+transportationLog = df_transportation_log
+transportationLog.columns = ['batchID', 'receiverName', 'senderName',  'arrivalDate', 'departureDate']
+transportationLog['ID'] = transportationLog.index
+print('TransportationLog: ')
+print(transportationLog.head())
+>>>>>>> a233064d5ad5bea1f455c7dfd5af851b147c1c93
 
 
-vaccination_shifts = df_shifts
-#print(vaccination_shifts)
 ## VaccinationShift
 vaccination_shifts = df_shifts[['weekday']]
 print('VaccinationShitfs: ')
@@ -53,7 +85,10 @@ print(vaccination_shifts.head())
 ## VaccinationEvent
 vaccination_event = df_vaccinations
 vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
+<<<<<<< HEAD
 #print(vaccination_event)
+=======
+>>>>>>> a233064d5ad5bea1f455c7dfd5af851b147c1c93
 print('VaccinationEvent: ')
 print(vaccination_event.head())
 
