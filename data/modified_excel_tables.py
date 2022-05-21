@@ -1,4 +1,7 @@
 import pandas as pd
+import datetime
+
+# Reading all data frames:
 
 df_vaccine_type = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccineType")
 df_manufacturer = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Manufacturer")
@@ -13,4 +16,11 @@ df_vaccine_patients = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet
 df_symptoms = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Symptoms")
 df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Diagnosis")
 
-df_vaccine_type.columns = []
+# Creating corresponding data frames:
+
+vaccination_shifts = df_shifts[['weekday']]
+print(vaccination_shifts)
+
+vaccination_event = df_vaccinations[['date', 'location', 'batchID']]
+vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
+print(vaccination_event)
