@@ -64,7 +64,7 @@ transportationLog.to_csv('data/CSVs/TransportationLog.csv', index = False)
 ## StaffMembers
 staffMember = df_staff_members[[col for col in df_staff_members if not col.startswith('Unnamed:')]]
 staffMember.columns = ['ssno', 'name', 'birthday', 'phone', 'role', 'vaccinationStatus', 'employer']
-staffMember = staffMember.reindex(columns = ['ssNo', 'name', 'phone', 'birthday', 'vaccinationStatus', 'role', 'employer'])
+staffMember = staffMember.reindex(columns = ['ssno', 'name', 'phone', 'birthday', 'vaccinationstatus', 'role', 'employer'])
 print('StaffMember: ')
 print(staffMember.head())
 staffMember.to_csv('data/CSVs/StaffMember.csv', index = False)
@@ -79,9 +79,9 @@ vaccination_shifts.to_csv('data/CSVs/VaccinationShift.csv', index = False)
 
 ## VaccinationEvent
 vaccination_event = df_vaccinations[[col for col in df_vaccinations if not col.startswith('Unnamed:')]]
-vaccination_event['date'] = pd.to_datetime(vaccination_event['date'],errors='coerce')
-vaccination_event = vaccination_event.dropna(axis=0, subset=['date'])
-vaccination_event = vaccination_event.rename(columns = {'batchID': 'batchid'})
+vaccination_event.columns = ['eventdate', 'location', 'batchid']
+vaccination_event['eventdate'] = pd.to_datetime(vaccination_event['eventdate'],errors='coerce')
+vaccination_event = vaccination_event.dropna(axis=0, subset=['eventdate'])
 print('VaccinationEvent: ')
 print(vaccination_event.head())
 vaccination_event.to_csv('data/CSVs/VaccinationEvent.csv', index=False)
@@ -95,9 +95,9 @@ patient.to_csv('data/CSVs/Patient.csv', index = False)
 
 ## Attend
 attend = df_vaccine_patients[[col for col in df_vaccine_patients if not col.startswith('Unnamed:')]]
-attend = attend.rename(columns={'patientSsNo': 'patient'})
-attend['date'] = pd.to_datetime(attend['date'], errors='coerce')
-attend = attend.dropna(axis=0, subset=['date'])
+attend.columns = ['visitdate', 'visitlocation', 'patient']
+attend['visitdate'] = pd.to_datetime(attend['visitdate'], errors='coerce')
+attend = attend.dropna(axis=0, subset=['visitdate'])
 print('Attend: ')
 print(attend.head())
 attend.to_csv('data/CSVs/Attend.csv', index = False)
@@ -112,8 +112,9 @@ symptom.to_csv('data/CSVs/Symptom.csv', index = False)
 ## Diagnosed
 
 diagnosed = df_diagnosis[[col for col in df_diagnosis if not col.startswith('Unnamed:')]]
-diagnosed['date'] = pd.to_datetime(diagnosed['date'], errors='coerce')
-diagnosed = diagnosed.dropna(axis=0, subset=['date'])
+diagnosed.columns = ['patient', 'symptom', 'diagnosedate']
+diagnosed['diagnosedate'] = pd.to_datetime(diagnosed['diagnosedate'], errors='coerce')
+diagnosed = diagnosed.dropna(axis=0, subset=['diagnosedate'])
 print('Diagnosed')
 print(diagnosed)
 diagnosed.to_csv('data/CSVs/Diagnosed.csv', index = False)
