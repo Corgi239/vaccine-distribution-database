@@ -4,7 +4,7 @@
 
 SELECT ssno, name, phone, role, vaccinationstatus, medicalfacility.location AS location
 FROM staffmember, medicalfacility, vaccinationevent, vaccinationshift
-WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.date = '2021-05-10' AND vaccinationshift.weekday = SELECT(to_char(date vaccinationevent.date, 'Day'));
+WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.date = '2021-05-10' AND vaccinationshift.weekday = to_char(date vaccinationevent.date, 'Day');
 
 
 /* 2
