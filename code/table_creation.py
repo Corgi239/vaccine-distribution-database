@@ -109,13 +109,14 @@ def main():
         psql_conn  = engine.connect()
 
         # Step 2 (Option 1): Read SQL files for CREATE TABLE and INSERT queries to student table 
-
         run_sql_from_file (sql_file1, psql_conn)
         
         # test
-        psql_conn.execute("INSERT INTO VaccinationShift VALUES (\"Monday\")")
-        result = psql_conn.execute("SELECT * FROM VaccinationShift" )
+        psql_conn.execute("INSERT INTO VaccinationShift VALUES ('Tuesday');")
+        result = psql_conn.execute("SELECT * FROM VaccinationShift;" )
         print(f'After create and insert:\n{result.fetchall()}')
+        psql_conn.execute("DROP TABLE VaccinationShift;")
+
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
     finally:
