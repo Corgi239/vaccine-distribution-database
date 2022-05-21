@@ -79,7 +79,6 @@ vaccination_shifts.to_csv('data/VaccinationShift.csv', index = False)
 vaccination_event = df_vaccinations[[col for col in df_vaccinations if not col.startswith('Unnamed:')]]
 vaccination_event['date'] = pd.to_datetime(vaccination_event['date'],errors='coerce')
 vaccination_event = vaccination_event.dropna(axis=0, subset=['date'])
-vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
 print('VaccinationEvent: ')
 print(vaccination_event.head())
 vaccination_event.to_csv('data/VaccinationEvent.csv', index=False)
