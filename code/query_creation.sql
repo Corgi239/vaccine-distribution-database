@@ -2,72 +2,72 @@
 * 1
 */
 
-SELECT ssNo, name, phone, role, vaccinationStatus, MedicalFacility.location AS Location
-FROM StaffMember, MedicalFacility, VaccinationEvent
-WHERE StaffMember.employer = MedicalFacility.name AND MedicalFacility.name = VaccinationEvent.location AND VaccinationEvent.date = '2021-05-10' AND VaccinationShift.weekday = to_char(date VaccinationEvent.date, 'Day');
+SELECT ssno, name, phone, role, vaccinationstatus, medicalfacility.location AS location
+FROM staffmember, medicalfacility, vaccinationevent, vaccinationshift
+WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.date = '2021-05-10' AND vaccinationshift.weekday = SELECT(to_char(date vaccinationevent.date, 'Day'));
 
 
 /* 2
 */
-SELECT ssNo, name
-FROM StaffMember, VaccinationShift, MedicalFacility
-WHERE VaccinationShift.worker = StaffMember.ssNo AND VaccinationShift.location = MedicalFacility.name AND MedicalFacility.address LIKE "%HELSINKI" AND VaccinationShift.weekday = "Wednesday" AND StaffMember.role = "doctor"
+SELECT ssno, name
+FROM staffmember, vaccinationshift, medicalfacility
+WHERE vaccinationshift.worker = staffmember.ssno AND vaccinationshift.location = medicalfacility.name AND medicalfacility.address LIKE "%HELSINKI" AND vaccinationshift.weekday = "Wednesday" AND staffmember.role = "doctor";
 
 /* 3
 */
 /* 3.1 */
-SELECT VaccinationBatch.batchID AS batchID, VaccinationBatch.initialReceiver AS intendedLocation, CurrentState.location as currentLocation, CurrentState.phoneNumber
-FROM VaccinationBatch, (SELECT VaccinationBatch.batchID AS ID, MAX(TransportationLog.arrivalDate), TransportationLog.receiverName AS location, MedicalFacility.phone AS phoneNumber
-                        FROM VaccinationBatch, TransportationLog, MedicalFacility
-                        WHERE VaccinationBatch.batchID = TransportationLog.batchID AND VaccinationBatch.initialReceiver = MedicalFacility.name
-                        GROUP BY VaccinationBatch.batchID) AS CurrentState
-WHERE VaccinationBatch.batchID = CurrentState.ID, VaccinationBatch.initialReceiver != CurrentState.location
+SELECT vaccinationbatch.batchid AS batchid, vaccinationbatch.initialreceiver AS intendedlocation, currentstate.location as currentlocation, currentstate.phonenumber
+FROM vaccinationbatch, (SELECT vaccinationbatch.batchid AS id, MAX(transportationlog.arrivaldate), transportationlog.receivername AS location, medicalfacility.phone AS phonenumber
+                        FROM vaccinationbatch, transportationlog, medicalfacility
+                        WHERE vaccinationbatch.batchid = transportationlog.batchid AND vaccinationbatch.initialreceiver = medicalfacility.name
+                        GROUP BY vaccinationbatch.batchid) AS currentstate
+WHERE vaccinationbatch.batchid = currentstate.id, vaccinationbatch.initialreceiver != currentstate.location;
 
 /* 3.2 */
-SELECT ID, intendedLocation, currentLocation, phoneNumber
-FROM (SELECT VaccinationBatch.batchID AS ID, MAX(TransportationLog.arrivalDate), TransportationLog.receiverName AS currentLocation, VaccinationBatch.initialReceiver AS intendedLocation,MedicalFacility.phone AS phoneNumber
-      FROM VaccinationBatch, TransportationLog, MedicalFacility
-      WHERE VaccinationBatch.batchID = TransportationLog.batchID AND VaccinationBatch.initialReceiver = MedicalFacility.name
-      GROUP BY VaccinationBatch.batchID) AS CurrentState
-WHERE intendedLocation != currentLocation
+SELECT id, intendedlocation, currentLlocation, phonenumber
+FROM (SELECT vaccinationbatch.batchid AS id, MAX(transportationlog.arrivaldate), transportationlog.receivername AS currentlocation, vaccinationbatch.initialreceiver AS intendedlocation, medicalfacility.phone AS phonenumber
+      FROM vaccinationbatch, transportationlog, medicalfacility
+      WHERE vaccinationbatch.batchid = transportationlog.batchid AND vaccinationbatch.initialreceiver = medicalfacility.name
+      GROUP BY vaccinationbatch.batchid) AS currentstate
+WHERE intendedlocation != currentlocation;
 
 /* 4
 */
 
-SELECT VaccinatedCriticalPatient.patient, VaccinationEvent.batchID, VaccinationBatch.vaccineID, VaccinationEvent.date, VaccinationEvent.location
-FROM VaccinationEvent, 
-(SELECT Patient.ssNo AS patient
-FROM Patient, Diagnosed, Symptom
-WHERE Diagnosed.date > '2021-05-10' AND Patient.ssNo = Diagnosed.patient AND Diagnosed.sympyom = Symptom.name) AS VaccinatedCriticalPatient, 
-VaccinationBatch, Attend
-WHERE VaccinatedCriticalPatient.patient = Attend.patient AND Attend.date = VaccinationEvent.date AND Attend.location = VaccinationEvent.location AND VaccinationEvent.batchID = VaccinationBatch.batchID
+SELECT vaccinatedcriticalpatient.patient, vaccinationevent.batchid, vaccinationbatch.vaccineid, vaccinationevent.date, vaccinationevent.location
+FROM vaccinationevent, 
+(SELECT patient.ssno AS patient
+FROM patient, diagnosed, symptom
+WHERE diagnosed.date > '2021-05-10' AND patient.ssno = diagnosed.patient AND diagnosed.sympyom = symptom.name) AS vaccinatedcriticalpatient, 
+vaccinationBatch, attend
+WHERE vaccinatedcriticalpatient.patient = attend.patient AND attend.date = vaccinationevent.date AND attend.location = vaccinationevent.location AND vaccinationevent.batchid = vaccinationbatch.batchid;
 
 /* 5
 */
 
-CREATE VIEW PatientVaccinationStatus(ssNo, name, birthday, gender, vaccinationStatus) AS:
-SELECT Patient.ssNo, Patient.name, Patient.birthday, Patient.gender, (0.5 * (COUNT(Attend.date) - 1 + ABS(COUNT(Attend.date) - 1)))
-FROM Patient, Attend
-WHERE Attend.patient = Patient.ssNo
-GROUP BY Patient.ssNo
+CREATE VIEW patientvaccinationstatus(ssno, name, birthday, gender, vaccinationstatus) AS:
+SELECT patient.ssno, patient.name, patient.birthday, patient.gender, (0.5 * (COUNT(attend.date) - 1 + ABS(COUNT(attend.date) - 1)))
+FROM patient, attend
+WHERE attend.patient = patient.ssNo
+GROUP BY patient.ssno;
 
 /* 6
 */
-SELECT SumForType.location, type, typeSum, sum FROM
-        (SELECT vaccinationBatch.initialReceiver AS location, VaccinationBatch.vaccineID AS type, SUM(vaccinationBatch.amount) AS typeSum FROM vaccinationBatch GROUP BY vaccinationBatch.initialReceiver, VaccinationBatch.vaccineID) AS SumForType
-        INNER JOIN (SELECT vaccinationBatch.initialReceiver AS location, SUM(vaccinationBatch.amount) AS sum FROM vaccinationBatch GROUP BY vaccinationBatch.initialReceiver) AS TotalSum ON SumForType.location = TotalSum.location
+SELECT sumfortype.location, vaccinetype, typesum, totalsum FROM
+        (SELECT vaccinationbatch.initialreceiver AS location, vaccinationbatch.vaccineid AS vaccinetype, SUM(vaccinationbatch.amount) AS typesum FROM vaccinationbatch GROUP BY vaccinationbatch.initialreceiver, vaccinationbatch.vaccineid) AS sumfortype
+        INNER JOIN (SELECT vaccinationbatch.initialreceiver AS location, SUM(vaccinationbatch.amount) AS totalsum FROM vaccinationbatch GROUP BY vaccinationbatch.initialreceiver) AS totalsum ON sumfortype.location = totalsum.location;
 
 /* 7
 */ 
-SELECT NoSymptom.vaccineType AS vaccineType, WithSymptom.symptom AS symptom, (CAST(WithSymptom.numberOfPatient AS DECIMAL) / NoSymptom.numberOfPatient) AS frequency
+SELECT nosymptom.vaccinetype AS vaccinetype, withsymptom.symptom AS symptom, (CAST(withsymptom.numberofpatient AS DECIMAL) / nosymptom.numberofpatient) AS frequency
         FROM
-        (SELECT VaccinationBatch.vaccineID AS vaccineType, COUNT(Patient.ssNo) AS numberOfPatient
-        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Symptom, Diagnosed
-        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND VaccinationEvent.date = Attend.date AND VaccinationEvent.location = Attend.location AND Attend.patient = Patient.ssNo AND Patient.ssNo = Diagnosed.patient AND Diagnosed.symptom = Symptom.name AND VaccinationEvent.date < Diagnosed.date
-        GROUP BY VaccinationBatch.vaccineID) AS NoSymptom
+        (SELECT vaccinationbatch.vaccineid AS vaccinetype, COUNT(patient.ssNo) AS numberofpatient
+        FROM vaccinationevent, vaccinationbatch, attend, patient, symptom, diagnosed
+        WHERE vaccinationevent.batchid = vaccinationbatch.batchid AND vaccinationevent.date = attend.date AND vaccinationevent.location = attend.location AND attend.patient = patient.ssno AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name AND vaccinationevent.date < diagnosed.date
+        GROUP BY vaccinationbatch.vaccineid) AS nosymptom
         INNER JOIN
-        (SELECT VaccinationBatch.vaccineID AS vaccineType, Symptom.name AS symptom, COUNT(Patient.ssNo) AS numberOfPatient
-        FROM VaccinationEvent, VaccinationBatch, Attend, Patient, Symptom, Diagnosed
-        WHERE VaccinationEvent.batchID = VaccinationBatch.batchID AND VaccinationEvent.date = Attend.date AND VaccinationEvent.location = Attend.location AND Attend.patient = Patient.ssNo AND Patient.ssNo = Diagnosed.patient AND Diagnosed.symptom = Symptom.name AND VaccinationEvent.date < Diagnosed.date
-        GROUP BY VaccinationBatch.vaccineID, Symptom.name) AS WithSymptom
-        ON NoSymptom.vaccineType = WithSymptom.vaccineType
+        (SELECT vaccinationbatch.vaccineid AS vaccinetype, symptom.name AS symptom, COUNT(patient.ssno) AS numberofpatient
+        FROM vaccinationevent, vaccinationbatch, attend, patient, symptom, diagnosed
+        WHERE vaccinationevent.batchid = vaccinationbatch.batchid AND vaccinationevent.date = attend.date AND vaccinationevent.location = attend.location AND attend.patient = patient.ssno AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name AND vaccinationevent.date < diagnosed.date
+        GROUP BY vaccinationbatch.vaccineid, symptom.name) AS withsymptom
+        ON nosymptom.vaccinetype = withsymptom.vaccinetype;
