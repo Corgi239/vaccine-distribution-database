@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS Attend(
     visitLocation VARCHAR(100) NOT NULL,
     patient VARCHAR(50) NOT NULL,
 
+    FOREIGN KEY (visitDate, visitLocation) REFERENCES VaccinationEvent(eventDate, location)
     FOREIGN KEY (patient) REFERENCES Patient(ssNo),
     PRIMARY KEY (visitDate, visitLocation, patient)
 );
