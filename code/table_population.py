@@ -29,52 +29,27 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-def run_sql_from_file(sql_file, psql_conn):
-    '''
-	read a SQL file with multiple stmts and process it
-	adapted from an idea by JF Santos
-	Note: not really needed when using dataframes.
-    '''
-    sql_command = ''
-    for line in sql_file:
-        #if line.startswith('VALUES'):        
-     # Ignore commented lines
-        if not line.startswith('--') and line.strip('\n'):        
-        # Append line to the command string, prefix with space
-           sql_command +=  ' ' + line.strip('\n')
-           #sql_command = ' ' + sql_command + line.strip('\n')
-        # If the command string ends with ';', it is a full statement
-        if sql_command.endswith(';'):
-            # Try to execute statement and commit it
-            try:
-                #print("running " + sql_command+".") 
-                psql_conn.execute(text(sql_command))
-                #psql_conn.commit()
-            # Assert in case of error
-            except:
-                print('Error at command:'+sql_command + ".")
-                ret_ =  False
-            # Finally, clear command string
-            finally:
-                sql_command = ''           
-                ret_ = True
-    return ret_
 
 def main():
     DATADIR = str(Path(__file__).parent.parent) # for relative path 
     print("Data directory: ", DATADIR)
 
-    # In postgres=# shell: CREATE ROLE [role_name] WITH CREATEDB LOGIN PASSWORD '[pssword]'; 
-    # https://www.postgresql.org/docs/current/sql-createrole.html
-
+    # *********************************************
+    # Credentials to connect to Postgres database *
+    # *********************************************
     database="grp21_vaccinedist"   
     user='grp21'       
     password='B5!BpWYT' 
     host='dbcourse2022.cs.aalto.fi'
     port= '5432'
-    # use connect function to establish the connection
+
+    # ****************************************************************************************
+    # Establish the connection to Postgres and creating tables in the database with SQL file *
+    # ****************************************************************************************
     try:
-        # Connect the postgres database from your local machine using psycopg2
+        # **********************************************************************
+        # Connect the postgres database from your local machine using psycopg2 *
+        # **********************************************************************
         connection = psycopg2.connect(
                                         database=database,              
                                         user=user,       
@@ -82,7 +57,6 @@ def main():
                                         host=host,
                                         port=port
                                     )
-        # connection.autocommit = True
         # Create a cursor to perform database operations
         cursor = connection.cursor()
         # Print PostgreSQL details
@@ -94,37 +68,41 @@ def main():
         record = cursor.fetchone()
         print("You are connected to - ", record, "\n")
 
-        # THE TUTORIAL WILL USE SQLAlchemy to create connection, execute queries and fill table
-        #####################################################################################################
-        # Create and fill table from sql file using run_sql_from_file function (Not needed if using pandas df)
-        #####################################################################################################
-        # Step 1: COnnect to db using SQLAlchemy create_engine 
+        # ****************************************************************************
+        # Populating tables in the database with SQLAlchemy and table_population.sql *
+        # ****************************************************************************
+        # Step 1: Connect to db using SQLAlchemy create_engine()
         DIALECT = 'postgresql+psycopg2://'
         db_uri = "%s:%s@%s/%s" % (user, password, host, database)
         print(DIALECT+db_uri) # postgresql+psycopg2://test_admin:pssword@localhost/tutorial4
         engine = create_engine(DIALECT + db_uri)
         psql_conn  = engine.connect()
 
-        # Step 2 (Option 1): Read SQL files for CREATE TABLE and INSERT queries to student table 
-  
-        # Step 1: read csv
-
+        # Step 2: Read CSV files and populating tables with pandas dataframe
         CSV_  = ".csv"
 
-        tables = ["VaccineData", "Manufacturer", "MedicalFacility", "VaccinationBatch", "TransportationLog", "StaffMember", "VaccinationShift", "VaccinationEvent", "Patient", "Symptom", "Diagnosed", "Attend"]
+        tables = ["VaccineData", # list of tables in the database that need to be populated
+                "Manufacturer", 
+                "MedicalFacility", 
+                "VaccinationBatch", 
+                "TransportationLog", 
+                "StaffMember", 
+                "VaccinationShift", 
+                "VaccinationEvent", 
+                "Patient", 
+                "Symptom", 
+                "Diagnosed", 
+                "Attend"]
 
-        # for loop to create dataframes and populate table
         for table in tables:
-            filename = table + CSV_
+            filename = table + CSV_ # create actual csv filename. E.g., CSV file Manufacturer.csv
+
+            # use pandas to read the csv file and load the data into dataframes
             df = pd.read_csv(DATADIR + '/data/CSVs/{}'.format(filename), sep=',', quotechar='"',dtype='unicode')
 
+            # use pandas dataframe to loading data into tables in Postgres database
+            # note: .lower() is used to decapitalize because everything in Postgres is in lowercase
             df.to_sql(table.lower(), con=psql_conn, if_exists='append', index=False)
-
-        #test
-        # test
-        # result = psql_conn.execute(""" SELECT * FROM student LIMIT 10 """ )
-        # print(f'After create and insert:\n{result.fetchall()}')
-
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
