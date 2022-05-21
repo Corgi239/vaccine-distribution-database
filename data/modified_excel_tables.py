@@ -63,7 +63,7 @@ transportationLog.to_csv('data/CSVs/TransportationLog.csv', index = False)
 
 ## StaffMembers
 staffMember = df_staff_members[[col for col in df_staff_members if not col.startswith('Unnamed:')]]
-staffMember.columns = ['ssno', 'name', 'birthday', 'phone', 'role', 'vaccinationStatus', 'employer']
+staffMember.columns = ['ssno', 'name', 'birthday', 'phone', 'role', 'vaccinationstatus', 'employer']
 staffMember = staffMember.reindex(columns = ['ssno', 'name', 'phone', 'birthday', 'vaccinationstatus', 'role', 'employer'])
 print('StaffMember: ')
 print(staffMember.head())
