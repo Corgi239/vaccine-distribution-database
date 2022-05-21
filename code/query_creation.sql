@@ -7,8 +7,8 @@ FROM staffmember, medicalfacility, vaccinationevent, vaccinationshift
 WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.eventdate = '2021-05-10' AND vaccinationshift.weekday = to_char(vaccinationevent.eventdate, 'Day');
 
 
-/* 2
-*/
+/* 2 WORKS!!!
+*/ 
 SELECT ssno, staffmember.name
 FROM staffmember, vaccinationshift, medicalfacility
 WHERE vaccinationshift.worker = staffmember.ssno AND vaccinationshift.location = medicalfacility.name AND medicalfacility.address LIKE '%HELSINKI' AND vaccinationshift.weekday = 'Wednesday' AND staffmember.role = 'doctor';
@@ -51,23 +51,23 @@ FROM patient, attend
 WHERE attend.patient = patient.ssNo
 GROUP BY patient.ssno;
 
-/* 6
+/* 6  WORKS!!!
 */
 SELECT sumfortype.location, vaccinetype, typesum, totalsum FROM
         (SELECT vaccinationbatch.initialreceiver AS location, vaccinationbatch.vaccineid AS vaccinetype, SUM(vaccinationbatch.amount) AS typesum FROM vaccinationbatch GROUP BY vaccinationbatch.initialreceiver, vaccinationbatch.vaccineid) AS sumfortype
         INNER JOIN (SELECT vaccinationbatch.initialreceiver AS location, SUM(vaccinationbatch.amount) AS totalsum FROM vaccinationbatch GROUP BY vaccinationbatch.initialreceiver) AS totalsum ON sumfortype.location = totalsum.location;
 
-/* 7
+/* 7 WORKS!!!
 */ 
 SELECT nosymptom.vaccinetype AS vaccinetype, withsymptom.symptom AS symptom, (CAST(withsymptom.numberofpatient AS DECIMAL) / nosymptom.numberofpatient) AS frequency
         FROM
         (SELECT vaccinationbatch.vaccineid AS vaccinetype, COUNT(patient.ssNo) AS numberofpatient
         FROM vaccinationevent, vaccinationbatch, attend, patient, symptom, diagnosed
-        WHERE vaccinationevent.batchid = vaccinationbatch.batchid AND vaccinationevent.date = attend.date AND vaccinationevent.location = attend.location AND attend.patient = patient.ssno AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name AND vaccinationevent.date < diagnosed.date
+        WHERE vaccinationevent.batchid = vaccinationbatch.batchid AND vaccinationevent.eventdate = attend.visitdate AND vaccinationevent.location = attend.visitlocation AND attend.patient = patient.ssno AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name AND vaccinationevent.eventdate < diagnosed.diagnosedate
         GROUP BY vaccinationbatch.vaccineid) AS nosymptom
         INNER JOIN
         (SELECT vaccinationbatch.vaccineid AS vaccinetype, symptom.name AS symptom, COUNT(patient.ssno) AS numberofpatient
         FROM vaccinationevent, vaccinationbatch, attend, patient, symptom, diagnosed
-        WHERE vaccinationevent.batchid = vaccinationbatch.batchid AND vaccinationevent.date = attend.date AND vaccinationevent.location = attend.location AND attend.patient = patient.ssno AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name AND vaccinationevent.date < diagnosed.date
+        WHERE vaccinationevent.batchid = vaccinationbatch.batchid AND vaccinationevent.eventdate = attend.visitdate AND vaccinationevent.location = attend.visitlocation AND attend.patient = patient.ssno AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name AND vaccinationevent.eventdate < diagnosed.diagnosedate
         GROUP BY vaccinationbatch.vaccineid, symptom.name) AS withsymptom
         ON nosymptom.vaccinetype = withsymptom.vaccinetype;
