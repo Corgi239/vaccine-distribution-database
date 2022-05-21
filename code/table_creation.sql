@@ -1,17 +1,16 @@
-CREATE DOMAIN Weekday VARCHAR(10) (
-    CHECK value IN (
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-    )
-);
+CREATE DOMAIN Weekday AS VARCHAR(10) CHECK 
+    value IN (
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    );
 
-CREATE DOMAIN GenderDomain CHAR(1)(
-    CHECK (VALUE IN ('F', 'M', 'O'))
+CREATE DOMAIN GenderDomain AS CHAR(1)(
+    CHECK (value IN ('F', 'M', 'O'))
 );
 
 CREATE TABLE VaccineData(
