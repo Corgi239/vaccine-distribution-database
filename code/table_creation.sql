@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS Attend(
     FOREIGN KEY (visitDate) REFERENCES VaccinationEvent(date),
     FOREIGN KEY (visitLocation) REFERENCES VaccinationEvent(location),
     FOREIGN KEY (patient) REFERENCES Patient(ssNo),
-    PRIMARY KEY (visitDate, patient)
+    PRIMARY KEY (visitDate, visitLocation, patient)
 );
 
 CREATE TABLE IF NOT EXISTS Plan(
