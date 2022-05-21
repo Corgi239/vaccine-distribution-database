@@ -19,87 +19,102 @@ df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="
 
 ## VaccineData
 vaccine_data = df_vaccine_type[[col for col in df_vaccine_type if not col.startswith('Unnamed:')]]
-vaccine_data.columns = ['vaccineID', 'name', 'nrOfDoses', 'tempMin', 'tempMax']
+vaccine_data.columns = ['vaccineid', 'name', 'nrofdoses', 'tempmin', 'tempmax']
 print('VaccineData: ')
 print(vaccine_data.head())
+vaccine_data.to_csv('data/CSVs/VaccineData.csv', index = False)
 
 ## Manufacturer
 manufacturer = df_manufacturer[[col for col in df_manufacturer if not col.startswith('Unnamed:')]]
-manufacturer.columns = ['ID', 'origin', 'phone', 'vaccineID']
+manufacturer.columns = ['id', 'origin', 'phone', 'vaccineid']
 print('Manufacturer: ')
 print(manufacturer.head())
+manufacturer.to_csv('data/CSVs/Manufacturer.csv', index = False)
 
 ## Vaccinationbatch
 vaccinationBatch = df_vaccine_batch[[col for col in df_vaccine_batch if not col.startswith('Unnamed:')]]
-vaccinationBatch.columns = ['batchID', 'amount', 'vaccineID', 'manufID', 'manufDate', 'expDate', 'initialReceiver']
-vaccinationBatch = vaccinationBatch.reindex(columns = ['batchID', 'amount', 'manufDate', 'expDate', 'manufID', 'vaccineID', 'initialReceiver'])
-vaccinationBatch['manufDate'] = pd.to_datetime(vaccinationBatch['manufDate'])
-vaccinationBatch['expDate'] = pd.to_datetime(vaccinationBatch['expDate'])
-vaccinationBatch = vaccinationBatch.dropna(axis = 0, subset=['manufDate', 'expDate'])
+vaccinationBatch.columns = ['batchid', 'amount', 'vaccineid', 'manufid', 'manufdate', 'expdate', 'initialreceiver']
+vaccinationBatch = vaccinationBatch.reindex(columns = ['batchid', 'amount', 'manufdate', 'expdate', 'manufid', 'vaccineid', 'initialreceiver'])
+vaccinationBatch['manufdate'] = pd.to_datetime(vaccinationBatch['manufdate'])
+vaccinationBatch['expdate'] = pd.to_datetime(vaccinationBatch['expdate'])
+vaccinationBatch = vaccinationBatch.dropna(axis = 0, subset=['manufdate', 'expdate'])
 print('VaccinationBatch: ')
 print(vaccinationBatch.head())
+vaccinationBatch.to_csv('data/CSVs/VaccinationBatch.csv', index=False)
 
 ## MedicalFacility
 medicalFacility = df_vaccination_stations[[col for col in df_vaccination_stations if not col.startswith('Unnamed:')]]
 medicalFacility.columns = ['name', 'address', 'phone']
 print('MedicalFacility:')
 print(medicalFacility)
+medicalFacility.to_csv('data/CSVs/MedicalFacility.csv', index = False)
 
 ## TransportationLog
 transportationLog = df_transportation_log[[col for col in df_transportation_log if not col.startswith('Unnamed:')]]
-transportationLog.columns = ['batchID', 'receiverName', 'senderName',  'arrivalDate', 'departureDate']
-transportationLog['ID'] = transportationLog.index
-transportationLog = transportationLog.reindex(columns = ['ID', 'departureDate', 'arrivalDate', 'batchID', 'senderName', 'receiverName'])
-transportationLog['departureDate'] = pd.to_datetime(transportationLog['departureDate'])
-transportationLog['arrivalDate'] = pd.to_datetime(transportationLog['arrivalDate'])
-transportationLog = transportationLog.dropna(axis=0, subset=['departureDate', 'arrivalDate'])
+transportationLog.columns = ['batchid', 'receivername', 'sendername',  'arrivaldate', 'departuredate']
+transportationLog['id'] = transportationLog.index
+transportationLog = transportationLog.reindex(columns = ['id', 'departuredate', 'arrivaldate', 'batchid', 'sendername', 'receivername'])
+transportationLog['departuredate'] = pd.to_datetime(transportationLog['departuredate'])
+transportationLog['arrivaldate'] = pd.to_datetime(transportationLog['arrivaldate'])
+transportationLog = transportationLog.dropna(axis=0, subset=['departuredate', 'arrivaldate'])
 print('TransportationLog: ')
 print(transportationLog.head())
+transportationLog.to_csv('data/CSVs/TransportationLog.csv', index = False)
 
 ## StaffMembers
 staffMember = df_staff_members[[col for col in df_staff_members if not col.startswith('Unnamed:')]]
-staffMember.columns = ['ssNo', 'name', 'birthday', 'phone', 'role', 'vaccinationStatus', 'employer']
-staffMember = staffMember.reindex(columns = ['ssNo', 'name', 'phone', 'birthday', 'vaccinationStatus', 'role', 'employer'])
+staffMember.columns = ['ssno', 'name', 'birthday', 'phone', 'role', 'vaccinationstatus', 'employer']
+staffMember = staffMember.reindex(columns = ['ssno', 'name', 'phone', 'birthday', 'vaccinationstatus', 'role', 'employer'])
 print('StaffMember: ')
 print(staffMember.head())
+staffMember.to_csv('data/CSVs/StaffMember.csv', index = False)
 
 ## VaccinationShift
 vaccination_shifts = df_shifts[[col for col in df_shifts if not col.startswith('Unnamed:')]]
+vaccination_shifts = vaccination_shifts.rename(columns={'station': 'location'})
 print('VaccinationShitfs: ')
 print(vaccination_shifts.head())
+vaccination_shifts.to_csv('data/CSVs/VaccinationShift.csv', index = False)
+
 
 ## VaccinationEvent
 vaccination_event = df_vaccinations[[col for col in df_vaccinations if not col.startswith('Unnamed:')]]
-vaccination_event['date'] = pd.to_datetime(vaccination_event['date'],errors='coerce')
-vaccination_event = vaccination_event.dropna(axis=0, subset=['date'])
-vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
+vaccination_event.columns = ['eventdate', 'location', 'batchid']
+vaccination_event['eventdate'] = pd.to_datetime(vaccination_event['eventdate'],errors='coerce')
+vaccination_event = vaccination_event.dropna(axis=0, subset=['eventdate'])
 print('VaccinationEvent: ')
 print(vaccination_event.head())
+vaccination_event.to_csv('data/CSVs/VaccinationEvent.csv', index=False)
 
 ## Patient 
 patient = df_patients[[col for col in df_patients if not col.startswith('Unnamed:')]]
-patient = patient.rename(columns={'date of birth': 'birthday'})
+patient = patient.rename(columns={'date of birth': 'birthday', 'ssNo': 'ssno'})
 print('Patient: ')
 print(patient.head())
+patient.to_csv('data/CSVs/Patient.csv', index = False)
 
 ## Attend
 attend = df_vaccine_patients[[col for col in df_vaccine_patients if not col.startswith('Unnamed:')]]
-attend = attend.rename(columns={'patientSsNo': 'patient'})
-attend['date'] = pd.to_datetime(attend['date'], errors='coerce')
-attend = attend.dropna(axis=0, subset=['date'])
+attend.columns = ['visitdate', 'visitlocation', 'patient']
+attend['visitdate'] = pd.to_datetime(attend['visitdate'], errors='coerce')
+attend = attend.dropna(axis=0, subset=['visitdate'])
 print('Attend: ')
 print(attend.head())
+attend.to_csv('data/CSVs/Attend.csv', index = False)
 
 ## Symptom
 symptom = df_symptoms[[col for col in df_symptoms if not col.startswith('Unnamed:')]]
 symptom = symptom.rename(columns = {'criticality':'critical'})
 print('Symptom:')
 print(symptom.head())
+symptom.to_csv('data/CSVs/Symptom.csv', index = False)
 
 ## Diagnosed
 
 diagnosed = df_diagnosis[[col for col in df_diagnosis if not col.startswith('Unnamed:')]]
-diagnosed['date'] = pd.to_datetime(diagnosed['date'], errors='coerce')
-diagnosed = diagnosed.dropna(axis=0, subset=['date'])
+diagnosed.columns = ['patient', 'symptom', 'diagnosedate']
+diagnosed['diagnosedate'] = pd.to_datetime(diagnosed['diagnosedate'], errors='coerce')
+diagnosed = diagnosed.dropna(axis=0, subset=['diagnosedate'])
 print('Diagnosed')
 print(diagnosed)
+diagnosed.to_csv('data/CSVs/Diagnosed.csv', index = False)

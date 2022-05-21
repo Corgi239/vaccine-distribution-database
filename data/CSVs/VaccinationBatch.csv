@@ -1,0 +1,31 @@
+batchid,amount,manufdate,expdate,manufid,vaccineid,initialreceiver
+B01,10,2021-01-24,2021-07-24,M1,V01,Sanomala Vaccination Point
+B02,10,2021-01-24,2021-07-24,M1,V01,Messukeskus
+B03,20,2021-03-01,2021-09-01,M1,V01,Myyrmäki Energia Areena
+B04,20,2021-03-01,2021-09-01,M1,V01,Malmi
+B05,20,2021-01-24,2021-07-24,M1,V01,Messukeskus
+B06,10,2021-01-24,2021-07-24,M2,V01,Iso Omena Vaccination Point
+B07,10,2021-03-01,2021-09-01,M2,V01,Myyrmäki Energia Areena
+B08,10,2021-03-01,2021-09-01,M2,V01,Tapiola Health Center
+B09,15,2021-01-24,2021-07-24,M3,V02,Messukeskus
+B10,15,2021-01-24,2021-07-24,M3,V02,Messukeskus
+B11,15,2021-01-24,2021-07-24,M3,V02,Tapiola Health Center
+B12,15,2021-01-24,2021-07-24,M3,V02,Sanomala Vaccination Point
+B13,15,2021-01-24,2021-07-24,M3,V02,Iso Omena Vaccination Point
+B14,15,2021-03-01,2021-09-01,M3,V02,Messukeskus
+B15,15,2021-03-01,2021-09-01,M3,V02,Malmi
+B16,15,2021-03-01,2021-09-01,M3,V02,Tapiola Health Center
+B17,15,2021-03-01,2021-09-01,M3,V02,Myyrmäki Energia Areena
+B18,15,2021-04-04,2021-10-04,M3,V02,Tapiola Health Center
+B19,15,2021-04-04,2021-10-04,M3,V02,Messukeskus
+B20,15,2021-04-04,2021-10-04,M3,V02,Messukeskus
+B21,15,2021-04-04,2021-10-04,M3,V02,Iso Omena Vaccination Point
+B22,15,2021-04-04,2021-10-04,M3,V02,Myyrmäki Energia Areena
+B23,15,2021-04-04,2021-10-04,M3,V02,Sanomala Vaccination Point
+B24,15,2021-04-04,2021-10-04,M3,V02,Malmi
+B25,15,2021-01-24,2021-07-24,M4,V03,Malmi
+B26,15,2021-01-24,2021-07-24,M4,V03,Messukeskus
+B27,15,2021-01-24,2021-07-24,M5,V03,Myyrmäki Energia Areena
+B28,15,2021-01-24,2021-07-24,M5,V03,Iso Omena Vaccination Point
+B29,10,2021-03-01,2021-09-01,M5,V03,Myyrmäki Energia Areena
+B30,10,2021-04-04,2021-10-04,M5,V03,Iso Omena Vaccination Point

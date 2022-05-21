@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS VaccineData(
     vaccineID VARCHAR(10) NOT NULL,
     name VARCHAR(50) NOT NULL,  
     nrOfDoses INT NOT NULL CHECK (nrOfDoses = 1 OR nrOfDoses = 2),
-    minTemp INT NOT NULL, 
-    maxTemp INT NOT NULL, 
+    tempMin INT NOT NULL, 
+    tempMax INT NOT NULL, 
 
     PRIMARY KEY (vaccineID)
 );
@@ -71,11 +71,7 @@ CREATE TABLE IF NOT EXISTS TransportationLog(
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE IF NOT EXISTS VaccinationShift(
-    weekday Weekday NOT NULL,
 
-    PRIMARY KEY (weekday)
-);
 
 CREATE TABLE IF NOT EXISTS StaffMember(
     ssNo VARCHAR(50) NOT NULL,
@@ -90,11 +86,20 @@ CREATE TABLE IF NOT EXISTS StaffMember(
     PRIMARY KEY(ssNo)
 );
 
+CREATE TABLE IF NOT EXISTS VaccinationShift(
+    location VARCHAR(100) NOT NULL,
+    weekday Weekday NOT NULL,
+    worker VARCHAR(50) NOT NULL,
+
+    FOREIGN KEY (location) REFERENCES MedicalFacility(name),
+    FOREIGN KEY (worker) REFERENCES StaffMember(ssNo),
+    PRIMARY KEY (location, weekday, worker)
+);
+
 CREATE TABLE IF NOT EXISTS VaccinationEvent(
     eventDate DATE NOT NULL,
     location VARCHAR(100) NOT NULL,
     batchID VARCHAR(10) NOT NULL,
-    weekday Weekday NOT NULL,
     
     FOREIGN KEY (location) REFERENCES MedicalFacility(name),
     FOREIGN KEY (batchID) REFERENCES VaccinationBatch(batchID),
@@ -137,21 +142,6 @@ CREATE TABLE IF NOT EXISTS Attend(
     PRIMARY KEY (visitDate, visitLocation, patient)
 );
 
-CREATE TABLE IF NOT EXISTS Plan(
-    shiftWeekday VARCHAR(10) NOT NULL,
-    facilityName VARCHAR(100) NOT NULL,
 
-    FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday),
-    PRIMARY KEY (shiftWeekday, facilityName)
-);
-
-CREATE TABLE IF NOT EXISTS WorkOn(
-    staffSSNo VARCHAR(50) NOT NULL,
-    shiftWeekday VARCHAR(10) NOT NULL,
-
-    FOREIGN KEY (staffSSNo) REFERENCES StaffMember(ssNo),
-    FOREIGN KEY (shiftWeekday) REFERENCES VaccinationShift(weekday),
-    PRIMARY KEY (staffSSNo, shiftWeekday)
-);
 
 

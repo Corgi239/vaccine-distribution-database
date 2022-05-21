@@ -94,8 +94,6 @@ def main():
         record = cursor.fetchone()
         print("You are connected to - ", record, "\n")
 
-        
-
         # THE TUTORIAL WILL USE SQLAlchemy to create connection, execute queries and fill table
         #####################################################################################################
         # Create and fill table from sql file using run_sql_from_file function (Not needed if using pandas df)
@@ -105,16 +103,28 @@ def main():
         db_uri = "%s:%s@%s/%s" % (user, password, host, database)
         print(DIALECT+db_uri) # postgresql+psycopg2://test_admin:pssword@localhost/tutorial4
         engine = create_engine(DIALECT + db_uri)
-        sql_file1  = open(DATADIR + '/code/table_creation.sql')
         psql_conn  = engine.connect()
 
         # Step 2 (Option 1): Read SQL files for CREATE TABLE and INSERT queries to student table 
-        run_sql_from_file (sql_file1, psql_conn)
-        
+  
+        # Step 1: read csv
+
+        CSV_  = ".csv"
+
+        tables = ["VaccineData", "Manufacturer", "MedicalFacility", "VaccinationBatch", "TransportationLog", "StaffMember", "VaccinationShift", "VaccinationEvent", "Patient", "Symptom", "Diagnosed", "Attend"]
+
+        # for loop to create dataframes and populate table
+        for table in tables:
+            filename = table + CSV_
+            df = pd.read_csv(DATADIR + '/data/CSVs/{}'.format(filename), sep=',', quotechar='"',dtype='unicode')
+
+            df.to_sql(table.lower(), con=psql_conn, if_exists='append', index=False)
+
+        #test
         # test
-        psql_conn.execute("INSERT INTO VaccinationShift VALUES ('Tuesday');")
-        result = psql_conn.execute("SELECT * FROM VaccinationShift;" )
-        print(f'After create and insert:\n{result.fetchall()}')
+        # result = psql_conn.execute(""" SELECT * FROM student LIMIT 10 """ )
+        # print(f'After create and insert:\n{result.fetchall()}')
+
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
