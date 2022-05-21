@@ -13,3 +13,4 @@ df_vaccine_patients = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet
 df_symptoms = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Symptoms")
 df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Diagnosis")
 
+df_vaccine_type.columns = []
