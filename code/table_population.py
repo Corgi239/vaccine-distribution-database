@@ -118,7 +118,7 @@ def main():
             filename = table + CSV_
             df = pd.read_csv(DATADIR + '/data/CSVs/{}'.format(filename), sep=',', quotechar='"',dtype='unicode')
 
-            df.to_sql(table, con=psql_conn, if_exists='append', index=False)
+            df.to_sql(table.lower(), con=psql_conn, if_exists='append', index=False)
 
         #test
         # test
