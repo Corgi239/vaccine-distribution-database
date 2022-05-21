@@ -119,4 +119,6 @@ def main():
             psql_conn.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
+
 main()

@@ -1,5 +1,13 @@
+"""
+This file is used for data cleaning and data preprocessing with pandas.
+"""
+
 import pandas as pd
-# Reading all data frames:
+
+
+# **********************************************************
+# Reading Excel files and load data into pandas dataframes *
+# **********************************************************
 
 df_vaccine_type = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccineType")
 df_manufacturer = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Manufacturer")
@@ -14,24 +22,27 @@ df_vaccine_patients = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet
 df_symptoms = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Symptoms")
 df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Diagnosis")
 
-# Creating corresponding data frames:
 
+# *******************************************************************************************
+# Data preprocessing and data cleaning with pandas                                          *
+# Exporting dataframes to cleaned .csv files for populating the tables in Postgres database *
+# *******************************************************************************************
 
-## VaccineData
+# VaccineData
 vaccine_data = df_vaccine_type[[col for col in df_vaccine_type if not col.startswith('Unnamed:')]]
 vaccine_data.columns = ['vaccineid', 'name', 'nrofdoses', 'tempmin', 'tempmax']
 print('VaccineData: ')
 print(vaccine_data.head())
 vaccine_data.to_csv('data/CSVs/VaccineData.csv', index = False)
 
-## Manufacturer
+# Manufacturer
 manufacturer = df_manufacturer[[col for col in df_manufacturer if not col.startswith('Unnamed:')]]
 manufacturer.columns = ['id', 'origin', 'phone', 'vaccineid']
 print('Manufacturer: ')
 print(manufacturer.head())
 manufacturer.to_csv('data/CSVs/Manufacturer.csv', index = False)
 
-## Vaccinationbatch
+# Vaccinationbatch
 vaccinationBatch = df_vaccine_batch[[col for col in df_vaccine_batch if not col.startswith('Unnamed:')]]
 vaccinationBatch.columns = ['batchid', 'amount', 'vaccineid', 'manufid', 'manufdate', 'expdate', 'initialreceiver']
 vaccinationBatch = vaccinationBatch.reindex(columns = ['batchid', 'amount', 'manufdate', 'expdate', 'manufid', 'vaccineid', 'initialreceiver'])
@@ -42,14 +53,14 @@ print('VaccinationBatch: ')
 print(vaccinationBatch.head())
 vaccinationBatch.to_csv('data/CSVs/VaccinationBatch.csv', index=False)
 
-## MedicalFacility
+# MedicalFacility
 medicalFacility = df_vaccination_stations[[col for col in df_vaccination_stations if not col.startswith('Unnamed:')]]
 medicalFacility.columns = ['name', 'address', 'phone']
 print('MedicalFacility:')
 print(medicalFacility)
 medicalFacility.to_csv('data/CSVs/MedicalFacility.csv', index = False)
 
-## TransportationLog
+# TransportationLog
 transportationLog = df_transportation_log[[col for col in df_transportation_log if not col.startswith('Unnamed:')]]
 transportationLog.columns = ['batchid', 'receivername', 'sendername',  'arrivaldate', 'departuredate']
 transportationLog['id'] = transportationLog.index
@@ -61,7 +72,7 @@ print('TransportationLog: ')
 print(transportationLog.head())
 transportationLog.to_csv('data/CSVs/TransportationLog.csv', index = False)
 
-## StaffMembers
+# StaffMembers
 staffMember = df_staff_members[[col for col in df_staff_members if not col.startswith('Unnamed:')]]
 staffMember.columns = ['ssno', 'name', 'birthday', 'phone', 'role', 'vaccinationstatus', 'employer']
 staffMember = staffMember.reindex(columns = ['ssno', 'name', 'phone', 'birthday', 'vaccinationstatus', 'role', 'employer'])
@@ -69,15 +80,14 @@ print('StaffMember: ')
 print(staffMember.head())
 staffMember.to_csv('data/CSVs/StaffMember.csv', index = False)
 
-## VaccinationShift
+# VaccinationShift
 vaccination_shifts = df_shifts[[col for col in df_shifts if not col.startswith('Unnamed:')]]
 vaccination_shifts = vaccination_shifts.rename(columns={'station': 'location'})
 print('VaccinationShitfs: ')
 print(vaccination_shifts.head())
 vaccination_shifts.to_csv('data/CSVs/VaccinationShift.csv', index = False)
 
-
-## VaccinationEvent
+# VaccinationEvent
 vaccination_event = df_vaccinations[[col for col in df_vaccinations if not col.startswith('Unnamed:')]]
 vaccination_event.columns = ['date', 'location', 'batchid']
 vaccination_event['date'] = pd.to_datetime(vaccination_event['date'],errors='coerce')
@@ -86,14 +96,14 @@ print('VaccinationEvent: ')
 print(vaccination_event.head())
 vaccination_event.to_csv('data/CSVs/VaccinationEvent.csv', index=False)
 
-## Patient 
+# Patient 
 patient = df_patients[[col for col in df_patients if not col.startswith('Unnamed:')]]
 patient = patient.rename(columns={'date of birth': 'birthday', 'ssNo': 'ssno'})
 print('Patient: ')
 print(patient.head())
 patient.to_csv('data/CSVs/Patient.csv', index = False)
 
-## Attend
+# Attend
 attend = df_vaccine_patients[[col for col in df_vaccine_patients if not col.startswith('Unnamed:')]]
 attend.columns = ['date', 'location', 'patient']
 attend['date'] = pd.to_datetime(attend['date'], errors='coerce')
@@ -102,15 +112,14 @@ print('Attend: ')
 print(attend.head())
 attend.to_csv('data/CSVs/Attend.csv', index = False)
 
-## Symptom
+# Symptom
 symptom = df_symptoms[[col for col in df_symptoms if not col.startswith('Unnamed:')]]
 symptom = symptom.rename(columns = {'criticality':'critical'})
 print('Symptom:')
 print(symptom.head())
 symptom.to_csv('data/CSVs/Symptom.csv', index = False)
 
-## Diagnosed
-
+# Diagnosed
 diagnosed = df_diagnosis[[col for col in df_diagnosis if not col.startswith('Unnamed:')]]
 diagnosed.columns = ['patient', 'symptom', 'date']
 diagnosed['date'] = pd.to_datetime(diagnosed['date'], errors='coerce')
