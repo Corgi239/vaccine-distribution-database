@@ -100,71 +100,30 @@ def main():
         #####################################################################################################
         # Step 1: COnnect to db using SQLAlchemy create_engine 
         DIALECT = 'postgresql+psycopg2://'
-        database ='tutorial4'
         db_uri = "%s:%s@%s/%s" % (user, password, host, database)
         print(DIALECT+db_uri) # postgresql+psycopg2://test_admin:pssword@localhost/tutorial4
         engine = create_engine(DIALECT + db_uri)
-        sql_file1  = open(DATADIR + '/postgresql/create_and_file_db_psql.sql')
         psql_conn  = engine.connect()
 
         # Step 2 (Option 1): Read SQL files for CREATE TABLE and INSERT queries to student table 
-
-        run_sql_from_file (sql_file1, psql_conn)
-        
-        # test
-        result = psql_conn.execute("SELECT * FROM student LIMIT 10" )
-        print(f'After create and insert:\n{result.fetchall()}')
-        # Drop table
-        psql_conn.execute("DROP TABLE student")
-
-        
-        #####################################################################################################
-        # Create and fill table from csv file using pandas df
-        #####################################################################################################
-        # Step 2 (Option 2): CREATE TABLE engine connection & fill in tables with Pandas Dataframe to_sql
-        # print ("\n\nUsing pandas dataframe to read sql queries and fill table")
-
-        try: 
-            psql_conn.execute("DROP TABLE student")
-        except:
-            print("Table student doesn't exist") 
-
-        psql_conn.execute(  'CREATE TABLE IF NOT EXISTS student('
-                            'studid INT NOT NULL,'
-                            'name VARCHAR(100) NOT NULL,'
-                            'dob DATE NOT NULL,'
-                            'program VARCHAR(10) NOT NULL,'
-                            'credit INT NOT NULL,'
-                            'PRIMARY KEY (studid)'
-                            ');'
-                        )
   
         # Step 1: read csv
-        df = pd.read_csv(DATADIR + '/student_data.csv', sep=',', quotechar='"',dtype='unicode')
 
-        #if we have an excel file
-        #df = pd.read_excel('ourfile.xlsx')
-        
-        # Some pre-processing 
-        df = df.loc[:,'studid':'credit'] 
-        # print(df)
+        CSV_  = ".csv"
 
-        # Step 2: the dataframe df is written into an SQL table 'student'
-        df.to_sql('student', con=psql_conn, if_exists='append', index=False)
+        tables = ["VaccineData", "Manufacturer", "MedicalFacility", "VaccinationBatch", "TransportationLog", "StaffMember", "VaccinationShift", "VaccinationEvent", "Patient", "Symptom", "Diagnosed", "Attend"]
+
+        # for loop to create dataframes and populate table
+        for table in tables:
+            filename = table + CSV_
+            df = pd.read_csv(DATADIR + '/data/CSVs/{}'.format(filename), sep=',', quotechar='"',dtype='unicode')
+
+            df.to_sql(table, con=psql_conn, if_exists='append', index=False)
 
         #test
         # test
         # result = psql_conn.execute(""" SELECT * FROM student LIMIT 10 """ )
         # print(f'After create and insert:\n{result.fetchall()}')
-        
-        sql_ =  """
-                SELECT * FROM student LIMIT 10
-                """
-        test_df = pd.read_sql_query(sql_,psql_conn)
-        print("Select 10 students from student table: ")
-        print(test_df)
-        # Drop table
-        # psql_conn.execute("DROP TABLE student")
 
 
     except (Exception, Error) as error:
