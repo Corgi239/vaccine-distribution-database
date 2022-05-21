@@ -1,3 +1,19 @@
+CREATE DOMAIN Weekday VARCHAR(10) (
+    CHECK value IN (
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    )
+);
+
+CREATE DOMAIN GenderDomain CHAR(1)(
+    CHECK (VALUE IN ('F', 'M', 'O'))
+);
+
 CREATE TABLE VaccineData(
     vaccineID VARCHAR(10) NOT NULL,
     nrOfDoses INT NOT NULL CHECK (nrOfDoses = 1 OR nrOfDoses = 2),
@@ -137,18 +153,4 @@ CREATE TABLE WorkOn(
     PRIMARY KEY (staffSSNo, shiftWeekday)
 );
 
-CREATE DOMAIN Weekday VARCHAR(10) (
-    CHECK value IN (
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-    )
-);
 
-CREATE DOMAIN GenderDomain CHAR(1)(
-    CHECK (VALUE IN ('F', 'M', 'O'))
-);
