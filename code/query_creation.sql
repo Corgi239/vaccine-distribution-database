@@ -10,8 +10,9 @@ WHERE StaffMember.employer = MedicalFacility.name AND  AND MedicalFacility.name 
 /* 2
 */
 SELECT ssNo, name
-FROM StaffMember, WorkOn, MedicalFacility
-WHERE StaffMember.ssNo = WorkOn.staffSSNo AND StaffMember.role = "doctor" AND WorkOn.shiftWeekday = "Wednesday" AND StaffMember.employer = MedicalFacility.name AND MedicalFacility.address LIKE "%HELSINKI"
+FROM StaffMember, VaccinationShift, MedicalFacility
+WHERE VaccinationShift.worker = StaffMember.ssNo AND VaccinationShift.location = MedicalFacility.name AND MedicalFacility.address LIKE "%HELSINKI" AND VaccinationShift.weekday = "Wednesday" AND StaffMember.role = "doctor"
+
 
 /* 3
 */
