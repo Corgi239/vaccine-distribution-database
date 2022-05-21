@@ -12,3 +12,6 @@ BEGIN
      EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.table_name) || ' CASCADE';
   END LOOP;
 END $$ ;
+
+DROP DOMAIN GenderDomain;
+DROP DOMAIN Weekday;
