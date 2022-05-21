@@ -52,7 +52,7 @@ medicalFacility.to_csv('data/CSVs/MedicalFacility.csv', index = False)
 ## TransportationLog
 transportationLog = df_transportation_log[[col for col in df_transportation_log if not col.startswith('Unnamed:')]]
 transportationLog.columns = ['batchid', 'receivername', 'sendername',  'arrivaldate', 'departuredate']
-transportationLog['ID'] = transportationLog.index
+transportationLog['id'] = transportationLog.index
 transportationLog = transportationLog.reindex(columns = ['id', 'departuredate', 'arrivaldate', 'batchid', 'sendername', 'receivername'])
 transportationLog['departuredate'] = pd.to_datetime(transportationLog['departuredate'])
 transportationLog['arrivaldate'] = pd.to_datetime(transportationLog['arrivaldate'])
