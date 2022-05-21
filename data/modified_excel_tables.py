@@ -71,9 +71,11 @@ staffMember.to_csv('data/StaffMember.csv', index = False)
 
 ## VaccinationShift
 vaccination_shifts = df_shifts[[col for col in df_shifts if not col.startswith('Unnamed:')]]
+vaccination_shifts = vaccination_shifts.rename(columns={'station': 'location'})
 print('VaccinationShitfs: ')
 print(vaccination_shifts.head())
 vaccination_shifts.to_csv('data/VaccinationShift.csv', index = False)
+
 
 ## VaccinationEvent
 vaccination_event = df_vaccinations[[col for col in df_vaccinations if not col.startswith('Unnamed:')]]
