@@ -34,6 +34,7 @@ print(manufacturer.head())
 ## Vaccinationbatch
 vaccinationBatch = df_vaccine_batch[[col for col in df_vaccine_batch if not col.startswith('Unnamed:')]]
 vaccinationBatch.columns = ['batchID', 'amount', 'vaccineID', 'manufID', 'manufDate', 'expDate', 'initialReceiver']
+vaccinationBatch = vaccinationBatch.reindex(columns = ['batchID', 'amount', 'manufDate', 'expDate', 'manufID', 'vaccineID', 'initialReceiver'])
 print('VaccinationBatch: ')
 print(vaccinationBatch.head())
 
@@ -47,12 +48,14 @@ print(medicalFacility)
 transportationLog = df_transportation_log[[col for col in df_transportation_log if not col.startswith('Unnamed:')]]
 transportationLog.columns = ['batchID', 'receiverName', 'senderName',  'arrivalDate', 'departureDate']
 transportationLog['ID'] = transportationLog.index
+transportationLog = transportationLog.reindex(columns = ['ID', 'departureDate', 'arrivalDate', 'batchID', 'senderName', 'receiverName'])
 print('TransportationLog: ')
 print(transportationLog.head())
 
 ## StaffMembers
 staffMember = df_staff_members[[col for col in df_staff_members if not col.startswith('Unnamed:')]]
 staffMember.columns = ['ssNo', 'name', 'birthday', 'phone', 'role', 'vaccinationStatus', 'employer']
+staffMember = staffMember.reindex(columns = ['ssNo', 'name', 'phone', 'birthday', 'vaccinationStatus', 'role', 'employer'])
 print('StaffMember: ')
 print(staffMember.head())
 
