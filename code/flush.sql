@@ -1,3 +1,9 @@
+/*
+This file is used for resetting database to the initial empty state
+
+It deletes all the tables and the domains in the query_creation.sql
+*/
+
 DO $$ 
   DECLARE 
     r RECORD;
