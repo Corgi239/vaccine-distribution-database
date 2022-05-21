@@ -110,7 +110,6 @@ def main():
         psql_conn  = engine.connect()
 
         # Step 2 (Option 1): Read SQL files for CREATE TABLE and INSERT queries to student table 
-        run_sql_from_file (sql_file_flush, psql_conn)
         run_sql_from_file (sql_file1, psql_conn)
         
         # test

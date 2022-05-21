@@ -91,14 +91,14 @@ CREATE TABLE IF NOT EXISTS StaffMember(
 );
 
 CREATE TABLE IF NOT EXISTS VaccinationEvent(
-    date DATE NOT NULL,
+    eventDate DATE NOT NULL,
     location VARCHAR(100) NOT NULL,
     batchID VARCHAR(10) NOT NULL,
     weekday Weekday NOT NULL,
     
     FOREIGN KEY (location) REFERENCES MedicalFacility(name),
     FOREIGN KEY (batchID) REFERENCES VaccinationBatch(batchID),
-    PRIMARY KEY (date, location)
+    PRIMARY KEY (eventDate, location)
 );
 
 /*Maybe remove the vaccinationStatus because we are asked to create vaccinationStatus in query 5 */
@@ -120,11 +120,11 @@ CREATE TABLE IF NOT EXISTS Symptom(
 CREATE TABLE IF NOT EXISTS Diagnosed(
     patient VARCHAR(50) NOT NULL,
     symptom VARCHAR(50) NOT NULL,
-    date DATE NOT NULL,
+    diagnoseDate DATE NOT NULL,
 
     FOREIGN KEY (patient) REFERENCES Patient(ssNo),
     FOREIGN KEY (symptom) REFERENCES Symptom(name),
-    PRIMARY KEY (patient, symptom, date)
+    PRIMARY KEY (patient, symptom, diagnoseDate)
 );
 
 CREATE TABLE IF NOT EXISTS Attend(
@@ -132,8 +132,6 @@ CREATE TABLE IF NOT EXISTS Attend(
     visitLocation VARCHAR(100) NOT NULL,
     patient VARCHAR(50) NOT NULL,
 
-    FOREIGN KEY (visitDate) REFERENCES VaccinationEvent(date),
-    FOREIGN KEY (visitLocation) REFERENCES VaccinationEvent(location),
     FOREIGN KEY (patient) REFERENCES Patient(ssNo),
     PRIMARY KEY (visitDate, visitLocation, patient)
 );
