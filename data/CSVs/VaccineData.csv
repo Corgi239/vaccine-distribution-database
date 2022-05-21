@@ -1,4 +1,4 @@
-vaccineID,name,nrOfDoses,tempMin,tempMax
+vaccineid,name,nrofdoses,tempmin,tempmax
 V01,AstraZeneca,2,2,8
 V02,Moderna,2,-25,-15
 V03,Comirnaty,2,-90,-60

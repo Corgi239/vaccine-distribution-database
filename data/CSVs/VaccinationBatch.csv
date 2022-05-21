@@ -1,4 +1,4 @@
-batchID,amount,manufDate,expDate,manufID,vaccineID,initialReceiver
+batchid,amount,manufdate,expdate,manufid,vaccineid,initialreceiver
 B01,10,2021-01-24,2021-07-24,M1,V01,Sanomala Vaccination Point
 B02,10,2021-01-24,2021-07-24,M1,V01,Messukeskus
 B03,20,2021-03-01,2021-09-01,M1,V01,Myyrmäki Energia Areena
