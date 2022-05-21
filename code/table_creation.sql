@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS VaccineData(
     vaccineID VARCHAR(10) NOT NULL,
     name VARCHAR(50) NOT NULL,  
     nrOfDoses INT NOT NULL CHECK (nrOfDoses = 1 OR nrOfDoses = 2),
-    minTemp INT NOT NULL, 
-    maxTemp INT NOT NULL, 
+    tempMin INT NOT NULL, 
+    tempMax INT NOT NULL, 
 
     PRIMARY KEY (vaccineID)
 );
