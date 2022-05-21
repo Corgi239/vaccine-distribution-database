@@ -128,14 +128,14 @@ CREATE TABLE IF NOT EXISTS Diagnosed(
 );
 
 CREATE TABLE IF NOT EXISTS Attend(
-    date DATE NOT NULL,
-    location VARCHAR(100) NOT NULL,
+    visitDate DATE NOT NULL,
+    visitLocation VARCHAR(100) NOT NULL,
     patient VARCHAR(50) NOT NULL,
 
-    FOREIGN KEY (date) REFERENCES VaccinationEvent(date),
-    FOREIGN KEY (location) REFERENCES VaccinationEvent(location),
+    FOREIGN KEY (visitDate) REFERENCES VaccinationEvent(date),
+    FOREIGN KEY (visitLocation) REFERENCES VaccinationEvent(location),
     FOREIGN KEY (patient) REFERENCES Patient(ssNo),
-    PRIMARY KEY (date, location, patient)
+    PRIMARY KEY (visitDate, visitLocation, patient)
 );
 
 CREATE TABLE IF NOT EXISTS Plan(
