@@ -1,0 +1,51 @@
+ID,departureDate,arrivalDate,batchID,senderName,receiverName
+0,2021-02-24,2021-02-24,B01,Messukeskus,Malmi
+1,2021-03-01,2021-03-01,B01,Malmi,Tapiola Health Center
+2,2021-04-30,2021-04-30,B01,Tapiola Health Center,Sanomala Vaccination Point
+3,2021-04-24,2021-04-24,B02,Messukeskus,Sanomala Vaccination Point
+4,2021-03-10,2021-03-10,B03,Messukeskus,Malmi
+5,2021-03-15,2021-03-15,B03,Malmi,Iso Omena Vaccination Point
+6,2021-04-15,2021-04-15,B03,Iso Omena Vaccination Point,Sanomala Vaccination Point
+7,2021-05-01,2021-05-01,B03,Sanomala Vaccination Point,Myyrmäki Energia Areena
+8,2021-03-20,2021-03-20,B04,Messukeskus,Malmi
+9,2021-01-30,2021-01-30,B06,Messukeskus,Tapiola Health Center
+10,2021-02-02,2021-02-02,B06,Tapiola Health Center,Iso Omena Vaccination Point
+11,2021-02-05,2021-02-05,B06,Iso Omena Vaccination Point,Myyrmäki Energia Areena
+12,2021-04-10,2021-04-10,B07,Messukeskus,Malmi
+13,2021-04-15,2021-04-15,B07,Malmi,Myyrmäki Energia Areena
+14,2021-03-14,2021-03-14,B08,Messukeskus,Tapiola Health Center
+15,2021-02-24,2021-02-24,B12,Messukeskus,Sanomala Vaccination Point
+16,2021-03-25,2021-03-25,B12,Sanomala Vaccination Point,Iso Omena Vaccination Point
+17,2021-03-30,2021-03-30,B12,Iso Omena Vaccination Point,Sanomala Vaccination Point
+18,2021-02-21,2021-02-21,B13,Messukeskus,Malmi
+19,2021-02-28,2021-02-28,B13,Malmi,Myyrmäki Energia Areena
+20,2021-03-05,2021-03-05,B13,Myyrmäki Energia Areena,Sanomala Vaccination Point
+21,2021-03-07,2021-03-07,B13,Sanomala Vaccination Point,Iso Omena Vaccination Point
+22,2021-04-01,2021-04-01,B15,Messukeskus,Malmi
+23,2021-04-10,2021-04-10,B16,Messukeskus,Tapiola Health Center
+24,2021-04-01,2021-04-01,B17,Messukeskus,Tapiola Health Center
+25,2021-04-27,2021-04-27,B17,Tapiola Health Center,Sanomala Vaccination Point
+26,2021-05-04,2021-05-04,B17,Sanomala Vaccination Point,Myyrmäki Energia Areena
+27,2021-04-08,2021-04-08,B18,Messukeskus,Tapiola Health Center
+28,2021-04-19,2021-04-19,B21,Messukeskus,Malmi
+29,2021-04-25,2021-04-25,B21,Malmi,Myyrmäki Energia Areena
+30,2021-04-28,2021-04-28,B21,Myyrmäki Energia Areena,Iso Omena Vaccination Point
+31,2021-04-09,2021-04-09,B22,Messukeskus,Malmi
+32,2021-04-20,2021-04-20,B22,Malmi,Sanomala Vaccination Point
+33,2021-04-25,2021-04-25,B22,Sanomala Vaccination Point,Myyrmäki Energia Areena
+34,2021-04-15,2021-04-15,B23,Messukeskus,Sanomala Vaccination Point
+35,2021-05-01,2021-05-01,B24,Messukeskus,Iso Omena Vaccination Point
+36,2021-05-05,2021-05-05,B24,Iso Omena Vaccination Point,Malmi
+37,2021-01-28,2021-01-28,B25,Messukeskus,Malmi
+38,2021-01-28,2021-01-28,B27,Messukeskus,Malmi
+39,2021-01-31,2021-01-31,B27,Malmi,Tapiola Health Center
+40,2021-02-06,2021-02-06,B27,Tapiola Health Center,Myyrmäki Energia Areena
+41,2021-02-24,2021-02-24,B28,Messukeskus,Sanomala Vaccination Point
+42,2021-02-28,2021-02-28,B28,Sanomala Vaccination Point,Iso Omena Vaccination Point
+43,2021-03-10,2021-03-10,B29,Messukeskus,Iso Omena Vaccination Point
+44,2021-04-12,2021-04-12,B29,Iso Omena Vaccination Point,Myyrmäki Energia Areena
+45,2021-04-20,2021-04-20,B29,Myyrmäki Energia Areena,Sanomala Vaccination Point
+46,2021-04-30,2021-04-30,B30,Messukeskus,Malmi
+47,2021-05-04,2021-05-04,B30,Malmi,Myyrmäki Energia Areena
+48,2021-05-07,2021-05-07,B30,Myyrmäki Energia Areena,Sanomala Vaccination Point
+49,2021-05-09,2021-05-09,B30,Sanomala Vaccination Point,Iso Omena Vaccination Point
