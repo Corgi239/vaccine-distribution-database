@@ -39,7 +39,38 @@ transportationLog['ID'] = transportationLog.index
 
 vaccination_shifts = df_shifts
 #print(vaccination_shifts)
+## VaccinationShift
+vaccination_shifts = df_shifts[['weekday']]
+print('VaccinationShitfs: ')
+print(vaccination_shifts.head())
 
-vaccination_event = df_vaccinations[['date', 'location', 'batchID']]
+## VaccinationEvent
+vaccination_event = df_vaccinations
 vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
+<<<<<<< HEAD
 #print(vaccination_event)
+=======
+print('VaccinationEvent: ')
+print(vaccination_event.head())
+
+## Patient 
+patient = df_patients.rename(columns={'date of birth': 'birthday'})
+print('Patient: ')
+print(patient.head())
+
+## Attend
+attend = df_vaccine_patients.rename(columns={'patientSsNo': 'patient'})
+print('Attend: ')
+print(attend.head())
+
+## Symptom
+symptom = df_symptoms.rename(columns = {'criticality':'critical'})
+print('Symptom:')
+print(symptom.head())
+
+## Diagnosed
+
+diagnosed = df_diagnosis
+print('Diagnosed')
+print(diagnosed.head())
+>>>>>>> 4a554d233a4edf2bc38bf2c8c1e10b45f6636aba

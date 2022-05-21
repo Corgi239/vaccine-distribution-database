@@ -1,4 +1,4 @@
-CREATE DOMAIN Weekday AS VARCHAR(10) CHECK 
+CREATE DOMAIN Weekday AS VARCHAR(10) CHECK ( 
     value IN (
         'Monday',
         'Tuesday',
@@ -7,21 +7,24 @@ CREATE DOMAIN Weekday AS VARCHAR(10) CHECK
         'Friday',
         'Saturday',
         'Sunday'
-    );
-
-CREATE DOMAIN GenderDomain AS CHAR(1)(
-    CHECK (value IN ('F', 'M', 'O'))
+    )
 );
 
-CREATE TABLE VaccineData(
+CREATE DOMAIN GenderDomain AS CHAR(1) CHECK (
+    value IN ('F', 'M', 'O')
+);
+
+CREATE TABLE IF NOT EXISTS VaccineData(
     vaccineID VARCHAR(10) NOT NULL,
+    name VARCHAR(50) NOT NULL,  
     nrOfDoses INT NOT NULL CHECK (nrOfDoses = 1 OR nrOfDoses = 2),
-    criticalTemperature INT NOT NULL, 
+    minTemp INT NOT NULL, 
+    maxTemp INT NOT NULL, 
 
     PRIMARY KEY (vaccineID)
 );
 
-CREATE TABLE Manufacturer(
+CREATE TABLE IF NOT EXISTS Manufacturer(
     ID VARCHAR(10) NOT NULL,
     origin VARCHAR(50) NOT NULL,
     phone VARCHAR(20) NOT NULL,
@@ -31,7 +34,7 @@ CREATE TABLE Manufacturer(
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE MedicalFacility(
+CREATE TABLE IF NOT EXISTS MedicalFacility(
     name VARCHAR(100) NOT NULL,
     address VARCHAR(200) NOT NULL, 
     phone VARCHAR(20) NOT NULL,
@@ -39,7 +42,7 @@ CREATE TABLE MedicalFacility(
     PRIMARY KEY (name)
 );
 
-CREATE TABLE VaccinationBatch(
+CREATE TABLE IF NOT EXISTS VaccinationBatch(
     batchID VARCHAR(10) NOT NULL,
     amount INT NOT NULL,
     manufDate DATE NOT NULL,
@@ -54,7 +57,7 @@ CREATE TABLE VaccinationBatch(
     PRIMARY KEY (batchID)
 );
 
-CREATE TABLE TransportationLog(
+CREATE TABLE IF NOT EXISTS TransportationLog(
     ID INT NOT NULL,
     departureDate DATE NOT NULL,
     arrivalDate DATE NOT NULL,
@@ -68,13 +71,13 @@ CREATE TABLE TransportationLog(
     PRIMARY KEY (ID)
 );
 
-CREATE TABLE VaccinationShift(
+CREATE TABLE IF NOT EXISTS VaccinationShift(
     weekday Weekday NOT NULL,
 
     PRIMARY KEY (weekday)
 );
 
-CREATE TABLE StaffMember(
+CREATE TABLE IF NOT EXISTS StaffMember(
     ssNo VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     phone VARCHAR(20) NOT NULL,
@@ -87,7 +90,7 @@ CREATE TABLE StaffMember(
     PRIMARY KEY(ssNo)
 );
 
-CREATE TABLE VaccinationEvent(
+CREATE TABLE IF NOT EXISTS VaccinationEvent(
     date DATE NOT NULL,
     location VARCHAR(100) NOT NULL,
     batchID VARCHAR(10) NOT NULL,
@@ -99,7 +102,7 @@ CREATE TABLE VaccinationEvent(
 );
 
 /*Maybe remove the vaccinationStatus because we are asked to create vaccinationStatus in query 5 */
-CREATE TABLE Patient(
+CREATE TABLE IF NOT EXISTS Patient(
     ssNo VARCHAR(50) NOT NULL,
     name VARCHAR(50) NOT NULL,
     birthday DATE NOT NULL,
@@ -107,14 +110,14 @@ CREATE TABLE Patient(
     PRIMARY KEY (ssNo)
 );
 
-CREATE TABLE Symptom(
+CREATE TABLE IF NOT EXISTS Symptom(
     name VARCHAR(50) NOT NULL,
     critical INT NOT NULL CHECK (critical = 0 OR critical = 1),
 
     PRIMARY KEY (name)
 );
 
-CREATE TABLE Diagnosed(
+CREATE TABLE IF NOT EXISTS Diagnosed(
     patient VARCHAR(50) NOT NULL,
     symptom VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
@@ -124,7 +127,7 @@ CREATE TABLE Diagnosed(
     PRIMARY KEY (patient, symptom, date)
 );
 
-CREATE TABLE Attend(
+CREATE TABLE IF NOT EXISTS Attend(
     date DATE NOT NULL,
     location VARCHAR(100) NOT NULL,
     patient VARCHAR(50) NOT NULL,
@@ -135,7 +138,7 @@ CREATE TABLE Attend(
     PRIMARY KEY (date, location, patient)
 );
 
-CREATE TABLE Plan(
+CREATE TABLE IF NOT EXISTS Plan(
     shiftWeekday VARCHAR(10) NOT NULL,
     facilityName VARCHAR(100) NOT NULL,
 
@@ -143,7 +146,7 @@ CREATE TABLE Plan(
     PRIMARY KEY (shiftWeekday, facilityName)
 );
 
-CREATE TABLE WorkOn(
+CREATE TABLE IF NOT EXISTS WorkOn(
     staffSSNo VARCHAR(50) NOT NULL,
     shiftWeekday VARCHAR(10) NOT NULL,
 
