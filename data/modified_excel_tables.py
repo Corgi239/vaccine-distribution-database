@@ -18,23 +18,29 @@ df_diagnosis = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="
 
 # Creating corresponding data frames:
 
-vaccine_data = df_vaccine_type
-vaccine_data.columns = ['vaccineID', 'name', 'nrOfDoses', 'tempMin', 'tempMax']
+vaccineData = df_vaccine_type
+vaccineData.columns = ['vaccineID', 'name', 'nrOfDoses', 'tempMin', 'tempMax']
+print(vaccineData)
 
-manufacturer = df_manufacturer.iloc[:, :-1]
+manufacturer = df_manufacturer
 manufacturer.columns = ['ID', 'origin', 'phone', 'vaccineID']
+print(manufacturer)
 
-vaccinationBatch = df_vaccine_batch.iloc[: , :-4]
-print(vaccinationBatch)
+vaccinationBatch = df_vaccine_batch
 vaccinationBatch.columns = ['batchID', 'amount', 'manufDate', 'expDate', 'manufID', 'vaccineID', 'initialReceiver']
+print(vaccinationBatch)
 
 medicalFacility = df_vaccination_stations
 medicalFacility.columns = ['name', 'address', 'phone']
+print(medicalFacility)
 
-transportationLog = df_transportation_log.iloc[:, :-4]
-print(transportationLog)
+transportationLog = df_transportation_log
 transportationLog.columns = ['batchID', 'receiverName', 'senderName',  'arrivalDate', 'departureDate']
 transportationLog['ID'] = transportationLog.index
+print(transportationLog)
+
+staffMembers = df_staff_members
+staffMembers.columns = ['ssNo', 'name', 'phone', 'birthday', 'vaccinationStatus', 'role', 'employer']
 
 
 vaccination_shifts = df_shifts
@@ -47,9 +53,7 @@ print(vaccination_shifts.head())
 ## VaccinationEvent
 vaccination_event = df_vaccinations
 vaccination_event['weekday'] = pd.Series(vaccination_event['date']).dt.day_name()
-<<<<<<< HEAD
 #print(vaccination_event)
-=======
 print('VaccinationEvent: ')
 print(vaccination_event.head())
 
@@ -73,4 +77,3 @@ print(symptom.head())
 diagnosed = df_diagnosis
 print('Diagnosed')
 print(diagnosed.head())
->>>>>>> 4a554d233a4edf2bc38bf2c8c1e10b45f6636aba
