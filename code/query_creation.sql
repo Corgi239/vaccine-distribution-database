@@ -2,16 +2,16 @@
 * 1
 */
 
-SELECT ssno, name, phone, role, vaccinationstatus, medicalfacility.location AS location
+SELECT ssno, staffmember.name, staffmember.phone, role, vaccinationstatus, medicalfacility.name AS location
 FROM staffmember, medicalfacility, vaccinationevent, vaccinationshift
-WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.date = '2021-05-10' AND vaccinationshift.weekday = SELECT(to_char(date vaccinationevent.date, 'Day'));
+WHERE staffmember.employer = medicalfacility.name AND medicalfacility.name = vaccinationevent.location AND vaccinationevent.eventdate = '2021-05-10' AND vaccinationshift.weekday = to_char(vaccinationevent.eventdate, 'Day');
 
 
 /* 2
 */
-SELECT ssno, name
+SELECT ssno, staffmember.name
 FROM staffmember, vaccinationshift, medicalfacility
-WHERE vaccinationshift.worker = staffmember.ssno AND vaccinationshift.location = medicalfacility.name AND medicalfacility.address LIKE "%HELSINKI" AND vaccinationshift.weekday = "Wednesday" AND staffmember.role = "doctor";
+WHERE vaccinationshift.worker = staffmember.ssno AND vaccinationshift.location = medicalfacility.name AND medicalfacility.address LIKE '%HELSINKI' AND vaccinationshift.weekday = 'Wednesday' AND staffmember.role = 'doctor';
 
 /* 3
 */
