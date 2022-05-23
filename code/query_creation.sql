@@ -1,5 +1,5 @@
 /* Hieu
-* 1
+* 1 WORKS !!!
 */
 
 SELECT ssno,
@@ -8,15 +8,16 @@ SELECT ssno,
        role,
        vaccinationstatus,
        medicalfacility.name AS location
-  FROM staffmember,
+ FROM  staffmember,
        medicalfacility,
        vaccinationevent,
-       vaccinationshift
+       vaccinationshift,
+       (SELECT(CAST(to_char(to_date('2021-05-10', 'YYYY-MM-DD'), 'Day') AS CHAR(10))) AS weekday) AS day
  WHERE staffmember.employer = medicalfacility.name AND 
        medicalfacility.name = vaccinationevent.location AND 
        vaccinationevent.date = '2021-05-10' AND 
-       vaccinationshift.weekday = to_char(vaccinationevent.date, 'Day');
-
+       vaccinationshift.worker = staffmember.ssno AND
+       vaccinationshift.weekday = day.weekday;
 
 /* 2 WORKS!!!
 */ 
