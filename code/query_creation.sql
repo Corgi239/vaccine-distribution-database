@@ -31,14 +31,14 @@ FROM (SELECT vaccinationbatch.batchid AS id, MAX(transportationlog.arrivaldate),
       GROUP BY vaccinationbatch.batchid) AS currentstate
 WHERE intendedlocation != currentlocation;
 
-/* 4
+/* 4 WORKS !!!
 */
 
 SELECT vaccinatedcriticalpatient.patient, vaccinationevent.batchid, vaccinationbatch.vaccineid, vaccinationevent.date, vaccinationevent.location
 FROM vaccinationevent, 
 (SELECT patient.ssno AS patient
 FROM patient, diagnosed, symptom
-WHERE diagnosed.date > '2021-05-10' AND patient.ssno = diagnosed.patient AND diagnosed.sympyom = symptom.name) AS vaccinatedcriticalpatient, 
+WHERE diagnosed.date > '2021-05-10' AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name) AS vaccinatedcriticalpatient, 
 vaccinationBatch, attend
 WHERE vaccinatedcriticalpatient.patient = attend.patient AND attend.date = vaccinationevent.date AND attend.location = vaccinationevent.location AND vaccinationevent.batchid = vaccinationbatch.batchid;
 
