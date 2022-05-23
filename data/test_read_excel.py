@@ -1,3 +1,8 @@
+"""
+This file is NOT important.
+It is used for testing with pandas and some other purposes.
+"""
+
 import pandas as pd
 df_vaccine_type = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="VaccineType")
 df_manufacturer = pd.read_excel('data/vaccine-distribution-data.xlsx', sheet_name="Manufacturer")

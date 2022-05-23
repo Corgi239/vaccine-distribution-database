@@ -64,17 +64,22 @@ def main():
     DATADIR = str(Path(__file__).parent.parent) # for relative path 
     print("Data directory: ", DATADIR)
 
-    # In postgres=# shell: CREATE ROLE [role_name] WITH CREATEDB LOGIN PASSWORD '[pssword]'; 
-    # https://www.postgresql.org/docs/current/sql-createrole.html
-
+    # *********************************************
+    # Credentials to connect to Postgres database *
+    # *********************************************
     database="grp21_vaccinedist"   
     user='grp21'       
     password='B5!BpWYT' 
     host='dbcourse2022.cs.aalto.fi'
     port= '5432'
-    # use connect function to establish the connection
+
+    # ****************************************************************************************
+    # Establish the connection to Postgres and creating tables in the database with SQL file *
+    # ****************************************************************************************
     try:
-        # Connect the postgres database from your local machine using psycopg2
+        # **********************************************************************
+        # Connect the postgres database from your local machine using psycopg2 *
+        # **********************************************************************
         connection = psycopg2.connect(
                                         database=database,              
                                         user=user,       
@@ -82,7 +87,6 @@ def main():
                                         host=host,
                                         port=port
                                     )
-        # connection.autocommit = True
         # Create a cursor to perform database operations
         cursor = connection.cursor()
         # Print PostgreSQL details
@@ -94,34 +98,27 @@ def main():
         record = cursor.fetchone()
         print("You are connected to - ", record, "\n")
 
-        
-
-        # THE TUTORIAL WILL USE SQLAlchemy to create connection, execute queries and fill table
-        #####################################################################################################
-        # Create and fill table from sql file using run_sql_from_file function (Not needed if using pandas df)
-        #####################################################################################################
-        # Step 1: COnnect to db using SQLAlchemy create_engine 
+        # **********************************************************************
+        # Create tables in the database with SQLAlchemy and table_creation.sql *
+        # **********************************************************************
+        # Step 1: Connect to db using SQLAlchemy create_engine()
         DIALECT = 'postgresql+psycopg2://'
         db_uri = "%s:%s@%s/%s" % (user, password, host, database)
-        print(DIALECT+db_uri) # postgresql+psycopg2://test_admin:pssword@localhost/tutorial4
+        print(DIALECT+db_uri)
         engine = create_engine(DIALECT + db_uri)
         sql_file1  = open(DATADIR + '/code/table_creation.sql')
         psql_conn  = engine.connect()
 
-        # Step 2 (Option 1): Read SQL files for CREATE TABLE and INSERT queries to student table 
+        # Step 2: Read SQL files for CREATE TABLE 
         run_sql_from_file (sql_file1, psql_conn)
-        
-        # test
-        psql_conn.execute("INSERT INTO VaccinationShift VALUES ('Tuesday');")
-        result = psql_conn.execute("SELECT * FROM VaccinationShift;" )
-        print(f'After create and insert:\n{result.fetchall()}')
 
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
     finally:
         if (connection):
             psql_conn.close()
-            # cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
+
+
 main()
