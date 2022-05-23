@@ -67,7 +67,7 @@ SELECT vaccinatedcriticalpatient.patient,
        attend.location = vaccinationevent.location AND 
        vaccinationevent.batchid = vaccinationbatch.batchid;
 
-/* 5 WORKS!!!
+/* 5 WORKS!!!!!!!!!!!!!!!
 */
 CREATE VIEW patientvaccinationstatus (
     ssno,
