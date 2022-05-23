@@ -77,16 +77,6 @@ SELECT id,
 
 /* 4 WORKS !!!
 */
-<<<<<<< HEAD
-
-SELECT vaccinatedcriticalpatient.patient, vaccinationevent.batchid, vaccinationbatch.vaccineid, vaccinationevent.date, vaccinationevent.location
-FROM vaccinationevent, 
-(SELECT patient.ssno AS patient
-FROM patient, diagnosed, symptom
-WHERE diagnosed.date > '2021-05-10' AND patient.ssno = diagnosed.patient AND diagnosed.symptom = symptom.name) AS vaccinatedcriticalpatient, 
-vaccinationBatch, attend
-WHERE vaccinatedcriticalpatient.patient = attend.patient AND attend.date = vaccinationevent.date AND attend.location = vaccinationevent.location AND vaccinationevent.batchid = vaccinationbatch.batchid;
-=======
 SELECT vaccinatedcriticalpatient.patient,
        vaccinationevent.batchid,
        vaccinationbatch.vaccineid,
@@ -109,9 +99,8 @@ SELECT vaccinatedcriticalpatient.patient,
        attend.date = vaccinationevent.date AND 
        attend.location = vaccinationevent.location AND 
        vaccinationevent.batchid = vaccinationbatch.batchid;
->>>>>>> 1ade8030240e6ddceaa7460e6108c6d57ec6b63b
 
-/* 5
+/* 5 WORKS!!!!!!!!!!!!!!!
 */
 CREATE VIEW patientvaccinationstatus (
     ssno,
