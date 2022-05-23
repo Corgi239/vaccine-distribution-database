@@ -32,48 +32,15 @@ SELECT ssno,
        staffmember.role = 'doctor';
 /* 3
 */
-/* 3.1 */
-SELECT vaccinationbatch.batchid AS batchid,
-       vaccinationbatch.initialreceiver AS intendedlocation,
-       currentstate.location AS currentlocation,
-       currentstate.phonenumber
-  FROM vaccinationbatch,
-       (
-           SELECT vaccinationbatch.batchid AS id,
-                  MAX(transportationlog.arrivaldate),
-                  transportationlog.receivername AS location,
-                  medicalfacility.phone AS phonenumber
-             FROM vaccinationbatch,
-                  transportationlog,
-                  medicalfacility
-            WHERE vaccinationbatch.batchid = transportationlog.batchid AND 
-                  vaccinationbatch.initialreceiver = medicalfacility.name
-            GROUP BY vaccinationbatch.batchid
-       )
-       AS currentstate
- WHERE vaccinationbatch.batchid = currentstate.id AND 
-       vaccinationbatch.initialreceiver != currentstate.location;
-
-/* 3.2 */
-SELECT id,
-       intendedlocation,
-       currentLlocation,
-       phonenumber
-  FROM (
-           SELECT vaccinationbatch.batchid AS id,
-                  MAX(transportationlog.arrivaldate),
-                  transportationlog.receivername AS currentlocation,
-                  vaccinationbatch.initialreceiver AS intendedlocation,
-                  medicalfacility.phone AS phonenumber
-             FROM vaccinationbatch,
-                  transportationlog,
-                  medicalfacility
-            WHERE vaccinationbatch.batchid = transportationlog.batchid AND 
-                  vaccinationbatch.initialreceiver = medicalfacility.name
-            GROUP BY vaccinationbatch.batchid
-       )
-       AS currentstate
- WHERE intendedlocation != currentlocation;
+SELECT currentState.batchID, currentState.receivername AS currentLocation, medicalfacility.phone
+FROM
+        (SELECT t.batchid, t.lastdate, m.receivername
+                FROM
+                (SELECT batchID, MAX(arrivaldate) as lastdate FROM TransportationLog GROUP BY batchID) as t
+                JOIN
+                (SELECT batchid, arrivaldate, receivername FROM TransportationLog) as m
+                ON t.batchid = m.batchid AND t.lastdate = m.arrivaldate) AS currentState, vaccinationbatch, medicalfacility
+WHERE currentState.receiverName != vaccinationbatch.initialreceiver AND vaccinationbatch.initialreceiver = medicalfacility.name
 
 /* 4 WORKS !!!
 */
@@ -190,3 +157,5 @@ SELECT nosymptom.vaccinetype AS vaccinetype,
                      symptom.name
        )
        AS withsymptom ON nosymptom.vaccinetype = withsymptom.vaccinetype;
+
+        
