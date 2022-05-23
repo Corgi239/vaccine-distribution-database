@@ -87,6 +87,18 @@ AS
      WHERE attend.patient = patient.ssNo
      GROUP BY patient.ssno;
 
+(SELECT patient.ssno,
+           patient.name,
+           patient.birthday,
+           patient.gender,
+           (0.5 * (COUNT(attend.date) - 1 + ABS(COUNT(attend.date) - 1) ) ) 
+      FROM patient,
+           attend
+     WHERE attend.patient = patient.ssNo
+     GROUP BY patient.ssno) AS attendvaccine
+(SELECT)
+
+
 /* 6  WORKS!!!
 */
 SELECT sumfortype.location,
