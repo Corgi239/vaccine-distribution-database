@@ -82,10 +82,19 @@ AS
            patient.birthday,
            patient.gender,
            (0.5 * (COUNT(attend.date) - 1 + ABS(COUNT(attend.date) - 1) ) ) 
-      FROM patient,
+     FROM patient,
            attend
      WHERE attend.patient = patient.ssNo
-     GROUP BY patient.ssno;
+     GROUP BY patient.ssno
+     UNION
+     SELECT patient.ssno,
+           patient.name,
+           patient.birthday,
+           patient.gender,
+           0.0
+     FROM patient
+     WHERE patient.ssNo NOT IN (SELECT patient FROM attend);
+
 
 (SELECT patient.ssno,
            patient.name,
