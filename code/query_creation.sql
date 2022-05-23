@@ -30,9 +30,9 @@ SELECT ssno,
        medicalfacility.address LIKE '%HELSINKI' AND 
        vaccinationshift.weekday = 'Wednesday' AND 
        staffmember.role = 'doctor';
-/* 3
+/* 3 WORKS!!!
 */
-SELECT currentState.batchID, currentState.receivername AS currentLocation, medicalfacility.phone
+SELECT currentState.batchID, currentState.receivername AS lastknownLocation, vaccinationbatch.initialReceiver AS currentLocation, medicalfacility.phone 
 FROM
         (SELECT t.batchid, t.lastdate, m.receivername
                 FROM
@@ -40,7 +40,7 @@ FROM
                 JOIN
                 (SELECT batchid, arrivaldate, receivername FROM TransportationLog) as m
                 ON t.batchid = m.batchid AND t.lastdate = m.arrivaldate) AS currentState, vaccinationbatch, medicalfacility
-WHERE currentState.receiverName != vaccinationbatch.initialreceiver AND vaccinationbatch.initialreceiver = medicalfacility.name
+WHERE currentState.batchid = vaccinationbatch.batchid AND currentState.receiverName != vaccinationbatch.initialreceiver AND vaccinationbatch.initialreceiver = medicalfacility.name;
 
 /* 4 WORKS !!!
 */
@@ -67,7 +67,7 @@ SELECT vaccinatedcriticalpatient.patient,
        attend.location = vaccinationevent.location AND 
        vaccinationevent.batchid = vaccinationbatch.batchid;
 
-/* 5
+/* 5 WORKS!!!
 */
 CREATE VIEW patientvaccinationstatus (
     ssno,
