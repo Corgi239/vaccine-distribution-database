@@ -184,7 +184,8 @@ SELECT sumfortype.location,
              FROM vaccinationbatch
             GROUP BY vaccinationbatch.initialreceiver
        )
-       AS totalsum ON sumfortype.location = totalsum.location;
+       AS totalsum ON sumfortype.location = totalsum.location
+  ORDER BY sumfortype.location, vaccinetype;
 
 /* 7 WORKS!!!
 */ 
@@ -222,7 +223,7 @@ SELECT vaccinatedpatients.vaccinetype AS vaccinetype,
                   attend.patient = patient.ssno AND 
                   patient.ssno = diagnosed.patient AND 
                   diagnosed.symptom = symptom.name AND 
-                  vaccinationevent.date < diagnosed.date
+                  vaccinationevent.date <= diagnosed.date
             GROUP BY vaccinationbatch.vaccineid,
                      symptom.name
        )
