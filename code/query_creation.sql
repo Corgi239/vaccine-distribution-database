@@ -65,9 +65,9 @@ SELECT currentState.batchID,
        currentState.receiverName != vaccinationbatch.initialreceiver AND 
        vaccinationbatch.initialreceiver = medicalfacility.name;
 
-/* 4 WORKS !!!
+/* 4 WORKS !!!   This need to be done again, there is something wrong with this thing.
 */
-SELECT vaccinatedcriticalpatient.patient,
+SELECT criticalpatient.patient,
        vaccinationevent.batchid,
        vaccinationbatch.vaccineid,
        vaccinationevent.date,
@@ -80,12 +80,13 @@ SELECT vaccinatedcriticalpatient.patient,
                   symptom
             WHERE diagnosed.date > '2021-05-10' AND 
                   patient.ssno = diagnosed.patient AND 
-                  diagnosed.sympyom = symptom.name
+                  diagnosed.symptom = symptom.name AND 
+                  symptom.critical = 1
        )
-       AS vaccinatedcriticalpatient,
+       AS criticalpatient,
        vaccinationBatch,
        attend
- WHERE vaccinatedcriticalpatient.patient = attend.patient AND 
+ WHERE criticalpatient.patient = attend.patient AND 
        attend.date = vaccinationevent.date AND 
        attend.location = vaccinationevent.location AND 
        vaccinationevent.batchid = vaccinationbatch.batchid;
@@ -117,6 +118,9 @@ AS
            0.0
      FROM patient
      WHERE patient.ssNo NOT IN (SELECT patient FROM attend);
+
+
+
 
 
 /* 6  WORKS!!!
