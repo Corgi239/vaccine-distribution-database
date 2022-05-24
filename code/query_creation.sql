@@ -28,20 +28,44 @@ SELECT ssno,
        medicalfacility
  WHERE vaccinationshift.worker = staffmember.ssno AND 
        vaccinationshift.location = medicalfacility.name AND 
-       medicalfacility.address LIKE '%HELSINKI' AND 
+       UPPER(medicalfacility.address) LIKE '%HELSINKI%' AND -- add UPPER METHOD to check for all case-sensitive possibilities
        vaccinationshift.weekday = 'Wednesday' AND 
        staffmember.role = 'doctor';
+
+
 /* 3 WORKS!!!
 */
-SELECT currentState.batchID, currentState.receivername AS lastknownLocation, vaccinationbatch.initialReceiver AS currentLocation, medicalfacility.phone 
-FROM
-        (SELECT t.batchid, t.lastdate, m.receivername
-                FROM
-                (SELECT batchID, MAX(arrivaldate) as lastdate FROM TransportationLog GROUP BY batchID) as t
-                JOIN
-                (SELECT batchid, arrivaldate, receivername FROM TransportationLog) as m
-                ON t.batchid = m.batchid AND t.lastdate = m.arrivaldate) AS currentState, vaccinationbatch, medicalfacility
-WHERE currentState.batchid = vaccinationbatch.batchid AND currentState.receiverName != vaccinationbatch.initialreceiver AND vaccinationbatch.initialreceiver = medicalfacility.name;
+SELECT currentState.batchID,
+       currentState.receivername AS lastknownLocation,
+       vaccinationbatch.initialReceiver AS currentLocation,
+       medicalfacility.phone
+  FROM (
+           SELECT t.batchid,
+                  t.lastdate,
+                  m.receivername
+             FROM (
+                      SELECT batchID,
+                             MAX(arrivaldate) AS lastdate
+                        FROM TransportationLog
+                       GROUP BY batchID
+                  )
+                  AS t
+                  JOIN
+                  (
+                      SELECT batchid,
+                             arrivaldate,
+                             receivername
+                        FROM TransportationLog
+                  )
+                  AS m ON t.batchid = m.batchid AND 
+                          t.lastdate = m.arrivaldate
+       )
+       AS currentState,
+       vaccinationbatch,
+       medicalfacility
+ WHERE currentState.batchid = vaccinationbatch.batchid AND 
+       currentState.receiverName != vaccinationbatch.initialreceiver AND 
+       vaccinationbatch.initialreceiver = medicalfacility.name;
 
 /* 4 WORKS !!! 
 */
