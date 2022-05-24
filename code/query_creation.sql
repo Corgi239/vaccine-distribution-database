@@ -140,7 +140,7 @@ CREATE VIEW patientvaccinationstatus (
     vaccinationstatus
 )
 AS
-    SELECT patient.ssno,
+    (SELECT patient.ssno,
            patient.name,
            patient.birthday,
            patient.gender,
@@ -148,15 +148,15 @@ AS
      FROM patient,
            attend
      WHERE attend.patient = patient.ssNo
-     GROUP BY patient.ssno
+     GROUP BY patient.ssno)
      UNION
-     SELECT patient.ssno,
+     (SELECT patient.ssno,
            patient.name,
            patient.birthday,
            patient.gender,
            0.0
      FROM patient
-     WHERE patient.ssNo NOT IN (SELECT patient FROM attend);
+     WHERE patient.ssNo NOT IN (SELECT patient FROM attend));
 
 
 
@@ -190,7 +190,7 @@ SELECT sumfortype.location,
 */ 
 SELECT vaccinatedpatients.vaccinetype AS vaccinetype,
        withsymptom.symptom AS symptom,
-       ROUND((CAST (withsymptom.numberofpatient AS DECIMAL) / vaccinatedpatients.numberofpatient), 3) AS frequency
+       ROUND( (CAST (withsymptom.numberofpatient AS DECIMAL) / vaccinatedpatients.numberofpatient), 3) AS frequency
   FROM (
            SELECT vaccinationbatch.vaccineid AS vaccinetype,
                   COUNT(patient.ssNo) AS numberofpatient
@@ -226,6 +226,7 @@ SELECT vaccinatedpatients.vaccinetype AS vaccinetype,
             GROUP BY vaccinationbatch.vaccineid,
                      symptom.name
        )
-       AS withsymptom ON vaccinatedpatients.vaccinetype = withsymptom.vaccinetype;
+       AS withsymptom ON vaccinatedpatients.vaccinetype = withsymptom.vaccinetype
+  ORDER BY vaccinetype;
 
         
