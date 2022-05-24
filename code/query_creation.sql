@@ -43,9 +43,9 @@ FROM
                 ON t.batchid = m.batchid AND t.lastdate = m.arrivaldate) AS currentState, vaccinationbatch, medicalfacility
 WHERE currentState.batchid = vaccinationbatch.batchid AND currentState.receiverName != vaccinationbatch.initialreceiver AND vaccinationbatch.initialreceiver = medicalfacility.name;
 
-/* 4 WORKS !!!
+/* 4 WORKS !!!   This need to be done again, there is something wrong with this thing.
 */
-SELECT vaccinatedcriticalpatient.patient,
+SELECT criticalpatient.patient,
        vaccinationevent.batchid,
        vaccinationbatch.vaccineid,
        vaccinationevent.date,
@@ -58,12 +58,13 @@ SELECT vaccinatedcriticalpatient.patient,
                   symptom
             WHERE diagnosed.date > '2021-05-10' AND 
                   patient.ssno = diagnosed.patient AND 
-                  diagnosed.sympyom = symptom.name
+                  diagnosed.symptom = symptom.name AND 
+                  symptom.critical = 1
        )
-       AS vaccinatedcriticalpatient,
+       AS criticalpatient,
        vaccinationBatch,
        attend
- WHERE vaccinatedcriticalpatient.patient = attend.patient AND 
+ WHERE criticalpatient.patient = attend.patient AND 
        attend.date = vaccinationevent.date AND 
        attend.location = vaccinationevent.location AND 
        vaccinationevent.batchid = vaccinationbatch.batchid;
@@ -97,16 +98,7 @@ AS
      WHERE patient.ssNo NOT IN (SELECT patient FROM attend);
 
 
-(SELECT patient.ssno,
-           patient.name,
-           patient.birthday,
-           patient.gender,
-           (0.5 * (COUNT(attend.date) - 1 + ABS(COUNT(attend.date) - 1) ) ) 
-      FROM patient,
-           attend
-     WHERE attend.patient = patient.ssNo
-     GROUP BY patient.ssno) AS attendvaccine
-(SELECT)
+
 
 
 /* 6  WORKS!!!
