@@ -34,7 +34,44 @@ SELECT ssno,
 
 
 /* 3 WORKS!!!
+
+There should be 2 parts according to the description:
+  1. For each vaccination batch, state the current location of the
+batch, and the last location in the transportation log. 
+  2. List separately the vaccine batch numbers with inconsistent
+location data, along with the phone number of the hospital or
+clinic where the vaccine batch should currently be.
 */
+-- Query 3.1 - suggested by Tam
+SELECT currentState.batchID,
+       currentState.receivername AS lastknownLocation,
+       vaccinationbatch.initialReceiver AS currentLocation
+  FROM (
+           SELECT t.batchid,
+                  t.lastdate,
+                  m.receivername
+             FROM (
+                      SELECT batchID,
+                             MAX(arrivaldate) AS lastdate
+                        FROM TransportationLog
+                       GROUP BY batchID
+                  )
+                  AS t
+                  JOIN
+                  (
+                      SELECT batchid,
+                             arrivaldate,
+                             receivername
+                        FROM TransportationLog
+                  )
+                  AS m ON t.batchid = m.batchid AND 
+                          t.lastdate = m.arrivaldate
+       )
+       AS currentState,
+       vaccinationbatch
+ WHERE currentState.batchid = vaccinationbatch.batchid;
+
+-- Query 3.2
 SELECT currentState.batchID,
        currentState.receivername AS lastknownLocation,
        vaccinationbatch.initialReceiver AS currentLocation,
