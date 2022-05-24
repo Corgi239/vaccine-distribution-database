@@ -227,6 +227,6 @@ SELECT vaccinatedpatients.vaccinetype AS vaccinetype,
                      symptom.name
        )
        AS withsymptom ON vaccinatedpatients.vaccinetype = withsymptom.vaccinetype
-  ORDER BY vaccinetype;
+  ORDER BY vaccinetype, symptom;
 
         
