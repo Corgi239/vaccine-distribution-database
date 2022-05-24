@@ -28,9 +28,11 @@ SELECT ssno,
        medicalfacility
  WHERE vaccinationshift.worker = staffmember.ssno AND 
        vaccinationshift.location = medicalfacility.name AND 
-       medicalfacility.address LIKE '%HELSINKI' AND 
+       UPPER(medicalfacility.address) LIKE '%HELSINKI%' AND -- add UPPER METHOD to check for all case-sensitive possibilities
        vaccinationshift.weekday = 'Wednesday' AND 
        staffmember.role = 'doctor';
+
+
 /* 3 WORKS!!!
 */
 SELECT currentState.batchID,
