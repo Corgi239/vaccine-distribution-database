@@ -1,2 +1,3 @@
 venv/
-/code/flush.txt
+code/flush.txt
+data_analysis/.ipynb_checkpoints
