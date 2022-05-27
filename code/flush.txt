@@ -1,1 +1,3 @@
+This file only contains 1 line for resetting the database in postgres
+
 \i C:/Users/tamqu/Downloads/flush.sql
