@@ -2,4 +2,5 @@ venv/
 code/flush.txt
 code/draft.sql
 data_analysis/.ipynb_checkpoints
+data_analysis/analysis_56.ipynb
 .DS_Store
